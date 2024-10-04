@@ -1,0 +1,3 @@
+application id = 660858
+access key = cN4O3yeawrbpI7nGIoxaHyK7K7Qa-dzIR0G8CaitPBw
+secret key = llmJYGEWJ9UNIrJRNt1KhIzJw2fgiQoZTIBWdgnrj7k
