@@ -22,3 +22,30 @@ h1 {
     align-items: center;
     gap: 1rem;
 }
+
+.loader {
+    padding: 1rem;
+    background-color: white;
+    position: fixed;
+    z-index: 10;
+    width: 100vw;
+    height: max-content;
+    margin: auto;
+    bottom: 0;
+}
+
+.loader img{
+    display: block;
+    margin: auto;
+    width: 20%;
+    height: 3rem;
+    object-fit: cover;
+}
+
+.hide{
+    visibility: hidden;
+}
+
+.show{
+    display: block;
+}

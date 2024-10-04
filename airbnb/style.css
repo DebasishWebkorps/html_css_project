@@ -1,0 +1,283 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: ;
+    box-sizing: border-box;
+}
+
+.firstSection {
+    background-color: #000000;
+    padding: 1em;
+}
+
+nav {
+    width: 90vw;
+    margin: auto;
+    padding-bottom: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pages ul {
+    list-style-type: none;
+    display: flex;
+    gap: 1rem;
+}
+
+.pages ul li {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    line-height: 24px;
+    color: white;
+    font-weight: 300;
+
+}
+
+.pages ul li:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.right {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+}
+
+.right a {
+    font-size: 14px;
+    text-decoration: none;
+    color: white;
+}
+
+.profileDropdown {
+    background-color: white;
+    border-radius: 1.5rem;
+    padding: 0.5em;
+}
+
+.search {
+    width: 40vw;
+    background-color: white;
+    border-radius: 2rem;
+    padding: 0.5rem;
+    margin: auto;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr) 0.2fr;
+    align-items: center;
+}
+
+.attributes {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0.3rem;
+    padding-right: 1rem;
+    font-size: 12px;
+}
+
+.attributes h1 {
+    font-size: 12px;
+}
+
+.attributes p {
+    font-size: 8px;
+    font-weight: 200;
+}
+
+.attributes img {
+    width: 48px;
+}
+
+.right {
+    padding-right: 0;
+}
+
+.divider {
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.imageSection {
+    width: 90vw;
+    margin: auto;
+    height: 640px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.textArea {
+    z-index: 10;
+    position: absolute;
+    bottom: 5vh;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.imageSection img {
+    width: 90vw;
+    object-fit: cover;
+}
+
+.textArea button {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.inspireSection {
+    padding-top: 3rem;
+    margin-bottom: 5%;
+    display: flex;
+    width: 90vw;
+    margin: auto;
+    flex-direction: column;
+}
+
+
+.inspireSection h1 {    
+    font-weight: 400;
+}
+
+.cardRow {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.cardText {
+    padding: 0.5rem 0.5rem 3rem 0.5rem;
+}
+
+.cardone {
+    background-color: #CC2D4A;
+}
+
+.cardtwo {
+    background-color: #BC1A6E;
+}
+
+.cardthree {
+    background-color: #DE3151;
+}
+
+.cardfour {
+    background-color: #D93B30;
+}
+
+.discoverSection {
+    padding-top: 3rem;
+    width: 90vw;
+    margin: auto;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.discoverRow {
+    padding-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    height: 600px;
+    gap: 1rem;
+}
+
+.discoverone,
+.discovertwo{
+    position: relative;
+}
+
+.discoverone img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.discovertwo img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.discoverText{
+    position: absolute;
+    width: 60%;
+    top: 2rem;
+    left: 2rem;
+}
+
+.discoverSection h1{
+    font-weight: 400;
+}
+
+.discoverText h3{
+    font-size: 48px;
+}
+
+.discoverText button{
+    border: none;
+    width: max-content;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.shopSection{
+    padding: 3rem 0;
+    width: 90vw;
+    height: 320px;
+    margin: auto;
+    display: flex;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shopText{
+    flex: 1;
+}
+
+.shopImage{
+    flex: 2;
+}
+
+.shopSection img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.shopText h1{
+    width: 50%;
+    color: black;
+}
+
+.shopText button{
+    width: max-content;
+    border: none;
+    padding: 10px;
+    background-color: black;
+    color: white;
+    margin-top: 20px;
+    cursor: pointer;
+}

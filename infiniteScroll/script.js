@@ -1,10 +1,13 @@
 const add = document.getElementById('add')
+const loader = document.querySelector('.loader')
 
 let loading = false
 
 window.addEventListener('scroll', () => {
     if (window.scrollY + window.innerHeight >= document.body.offsetHeight - 100 && !loading) {
         loading = true
+        loader.classList.remove('hide')
+        loader.classList.add('show')
         getData()
     }
 })
@@ -50,15 +53,15 @@ async function getData() {
 
     try {
 
-        const response = await fetch(`https://fakestoreapi.com/products?limit=2`)
+        const response = await fetch(`https://fakestoreapi.com/products?limit=3`)
         // const response = await fetch('https://api.unsplash.com/photos/random?client_id=cN4O3yeawrbpI7nGIoxaHyK7K7Qa-dzIR0G8CaitPBw')
         const data = await response.json()
         loading = false
+        loader.classList.remove('show')
+        loader.classList.add('hide')
         data.map(d => {
             fakestore(d)
-
         })
-        return data
     } catch (err) {
         console.log(err.message)
     } finally {
