@@ -1,0 +1,101 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid brown;
+}
+
+header button {
+    height: max-content;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background-color: rebeccapurple;
+    color: white;
+    padding: 4px;
+}
+
+.allPosts {
+    padding-top: 20px;
+    width: 80vw;
+    margin: auto;
+}
+
+.allPosts h3 {
+    text-align: center;
+    text-decoration: underline;
+}
+
+ul {
+    list-style-type: none;
+}
+
+ul li {
+    padding: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.341);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+ul li h4 {
+    cursor: pointer;
+
+}
+
+ul button {
+    cursor: pointer;
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    display: block;
+}
+
+.overlayView,
+.overlayEditView {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(141, 131, 131, 0.3);
+}
+
+.content {
+    /* width: 100%; */
+    height: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    width: 60vw;
+    background-color: rebeccapurple;
+    padding: 10px;
+    border-radius: 8px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+form input {
+    height: 5vh;
+}
+
+form button {
+    width: max-content;
+    margin: auto;
+}

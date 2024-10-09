@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="tabs">
+            <div role="tablist" aria-label="Programming language">
+                <button role="tab" aria-selected="true" id="js">Javascript</button>
+                <button role="tab" aria-selected="false" id="ruby">Ruby</button>
+                <button role="tab" aria-selected="false" id="php">PHP</button>
+            </div>
+
+            <div role="tabpanel" aria-labelledby="js">
+                <p>Javascript is great</p>
+            </div>
+            <div role="tabpanel" aria-labelledby="ruby">
+                <p>Ruby is great</p>
+            </div>
+            <div role="tabpanel" aria-labelledby="php" >
+                <p>PHP is great</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const tabs = document.querySelectorAll('[role="tab"]')
+        const tabpanel = document.querySelectorAll('[role="tabpanel"]')
+
+        tabpanel.forEach(panel => {
+            panel.hidden = true
+        })
+
+        tabs.forEach(button => {
+            button.ariaSelected = false;
+            button.addEventListener('click', (event) => {
+                console.log(event.currentTarget)
+                event.currentTarget.setAttribute('aria-selected', true)
+            })
+        })
+    </script>
+</body>
+
+</html>

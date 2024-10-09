@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turtle Game</title>
+    <style>
+        .turtle {
+            width: 80px;
+            position: relative;
+            --x: 0px;
+            --y: 0px;
+            transform: translateX(var(--x)) translateY(var(--y)) rotateY(180deg);
+        }
+    </style>
+</head>
+
+<body style="background-color: rgba(0, 255, 255, 0.337);">
+
+    <img class="turtle" src="turtle.png" alt="" srcset="">
+
+    <!-- <button>Check</button> -->
+
+    <script>
+
+        // const btn = document.querySelector('button')
+        // btn.addEventListener('click', checkHandler)
+
+
+        // function checkHandler() {
+        //     console.log(this);
+        //     setTimeout( ()=> {
+        //         console.log(this);
+        //         this.textContent = "You Clicked Me";
+        //     }, 1000);
+        // }
+
+        const turtle = document.querySelector('.turtle')
+
+        let x = 0;
+        let y = 0;
+
+        window.addEventListener('keydown', (event) => {
+
+            if (event.key.includes('Arrow')) {
+                switch (event.key) {
+                    case 'ArrowUp':
+                        y = y - 1;
+                        break;
+                    case 'ArrowDown':
+                        y = y + 1;
+                        break;
+                    case 'ArrowLeft':
+                        x = x - 1;
+                        break;
+                    case 'ArrowRight':
+                        x = x + 1
+                        break;
+                    default:
+                        console.log('not a valid move');
+                        break;
+                }
+                turtle.setAttribute("style", `--x:${x}px; --y:${y}px`)
+            }
+        })
+    </script>
+</body>
+
+</html>

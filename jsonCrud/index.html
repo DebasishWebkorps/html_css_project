@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>JSON Crud</title>
+
+
+</head>
+
+<body>
+
+
+    <header>
+        <h1>Hi <span class="user"></span></h1>
+        <button class="addPost">Add Post</button>
+    </header>
+
+    <div>
+        <ul class="allPosts">
+            <h3>All Posts</h3>
+
+        </ul>
+    </div>
+
+   
+
+    <div class="overlayView hide">
+        <div class="content">
+
+            <form class="addForm" action="#" onsubmit="addPostHandler(event)">
+                <input type="text" id="posttitle">
+                <button type="submit">Add Post</button>
+            </form>
+            
+        </div>
+    </div>
+
+
+    <div class="overlayEditView hide">
+        <div class="content">
+
+            <form class="editForm" action="#" onsubmit="editPostHandler(event)">
+                <input type="text" id="editposttitle">
+                <button type="submit">Update Post</button>
+            </form>
+            
+        </div>
+    </div>
+
+
+
+
+    <script src="script.js"></script>
+</body>
+
+</html>

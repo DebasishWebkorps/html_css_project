@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    box-sizing: border-box;
+}
+
+.firstSection {
+    background-color: #000000;
+    padding: 1em;
+}
+
+nav {
+    width: 90vw;
+    margin: auto;
+    padding-bottom: 1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.right {
+    display: flex;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+}
+
+.right a {
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.profileDropdown {
+    border:  1px solid rgba(0, 0, 0, 0.266);
+    border-radius: 1.5rem;
+    padding: 8px;
+}
