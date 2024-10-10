@@ -12,29 +12,28 @@
 
 <body>
 
-
     <header>
         <h1>Hi <span class="user"></span></h1>
         <button class="addPost">Add Post</button>
     </header>
 
     <div>
+        <h3 style="text-align: center; text-decoration: underline;">All Posts</h3>
         <ul class="allPosts">
-            <h3>All Posts</h3>
 
         </ul>
     </div>
 
-   
 
     <div class="overlayView hide">
         <div class="content">
 
-            <form class="addForm" action="#" onsubmit="addPostHandler(event)">
+            <form class="addForm">
+                <h2 style="text-align: center; color: white;">Add Post</h2>
                 <input type="text" id="posttitle">
                 <button type="submit">Add Post</button>
             </form>
-            
+
         </div>
     </div>
 
@@ -43,17 +42,17 @@
         <div class="content">
 
             <form class="editForm" action="#" onsubmit="editPostHandler(event)">
+                <h2 style="text-align: center; color: white;">Update Post</h2>
                 <input type="text" id="editposttitle">
                 <button type="submit">Update Post</button>
             </form>
-            
+
         </div>
     </div>
 
 
-
-
     <script src="script.js"></script>
+    
 </body>
 
 </html>

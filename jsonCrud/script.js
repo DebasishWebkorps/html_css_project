@@ -8,15 +8,24 @@ const posttitle = document.getElementById('editposttitle')
 const addform = document.querySelector('.addForm')
 const editform = document.querySelector('.editForm')
 
+
+
+
 function cancelHandler(e) {
     e.stopPropagation()
     overlayView.classList.toggle('hide')
 }
 
-async function addPostHandler(event) {
+
+addform.addEventListener('submit', async (event) => {
     event.preventDefault()
+     addPostHandler()
+}
+)
+
+async function addPostHandler() {
     const posttitle = document.getElementById('posttitle')
-    const title = posttitle.value
+    const title = posttitle.value.trim()
     if (!title) {
         alert('Write Something')
         return
@@ -26,9 +35,18 @@ async function addPostHandler(event) {
             method: 'POST',
             body: JSON.stringify({
                 title
-            })
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         })
-        // const data = await response.json()
+        const data = await response.json()
+        if (data) {
+            createPost(data)
+            overlayView.classList.toggle('hide')
+        } else {
+            throw new Error('some error occured')
+        }
 
     } catch (err) {
         console.log(err.message)
@@ -46,8 +64,11 @@ async function editPostHandler(event) {
                 title: updatedTitle
             })
         })
-        // const data = await response.json()
-
+        const data = await response.json()
+        const targetElement = document.querySelector(`li[id="${data.id}"]`);
+        const textElement = targetElement.querySelector('h4')
+        textElement.innerHTML = data.title
+        overlayEditView.classList.toggle('hide')
     } catch (err) {
         console.log(err.message)
     }
@@ -65,8 +86,9 @@ const createPost = (data) => {
     const li = document.createElement('li')
 
     const h4 = document.createElement('h4')
-    const postName = document.createTextNode(data.title)
-    h4.appendChild(postName)
+    // const postName = document.createTextNode(data.title)
+    h4.innerHTML = data.title
+    // h4.appendChild(postName)
 
     li.setAttribute('id', data.id)
 
@@ -96,10 +118,7 @@ const createPost = (data) => {
     })
 
     delbutton.addEventListener('click', async (event) => {
-        event.stopPropagation();
         const id = event.target.getAttribute('id')
-        // overlayView.classList.toggle('hide')
-
         try {
             const response = await fetch(`http://localhost:3000/posts/${id}`, {
                 method: 'DELETE'
@@ -107,6 +126,12 @@ const createPost = (data) => {
 
             )
             const data = await response.json()
+            if (data) {
+                const delElement = document.querySelector(`li[id="${data.id}"]`)
+                allPosts.removeChild(delElement)
+            } else {
+                throw new Error('Some error occured')
+            }
         } catch (err) {
             console.log(err.message)
         }
@@ -150,21 +175,17 @@ async function getAllPosts() {
 window.addEventListener('DOMContentLoaded', (event) => {
     getUser()
     getAllPosts()
+
 })
 
 overlayView.addEventListener('click', (event) => {
+    if (event.target.closest('.addForm') !== null) return;
     overlayView.classList.toggle('hide')
 })
 
 overlayEditView.addEventListener('click', (event) => {
+    if (event.target.closest('.editForm') !== null) return;
     overlayEditView.classList.toggle('hide')
 })
 
-addform.addEventListener('click', (event) => {
-    event.stopPropagation();
-})
-
-editform.addEventListener('click', (event) => {
-    event.stopPropagation();
-})
 

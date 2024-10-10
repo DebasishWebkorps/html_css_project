@@ -4,21 +4,34 @@
     box-sizing: border-box;
 }
 
+
+
 header {
     display: flex;
+    padding: 1rem 2rem;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid brown;
+    background-color: black;
+    font-size: x-small;
+    color: white;
 }
+
+/* .user{
+    font-size: 22px;
+    color: white;
+} */
 
 header button {
     height: max-content;
     border-radius: 8px;
     border: none;
     cursor: pointer;
-    background-color: rebeccapurple;
-    color: white;
-    padding: 4px;
+    background-color: rgb(29, 239, 82);
+    color: rgb(0, 0, 0);
+    padding: 4px 12px;
+    font-weight: bold;
+    box-shadow: 0px 0px 15px white;
 }
 
 .allPosts {
@@ -34,14 +47,28 @@ header button {
 
 ul {
     list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 ul li {
+    flex-grow: 1;
+    width: 200px;
+    height: 100px;
     padding: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.341);
+    border: 1px solid rgba(0, 0, 0, 0.341);
+    border-radius: 8px;
+    background-color: aqua;
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
+}
+
+ul li:hover{
+    transform: scale(1.02);
+    box-shadow: 2px 2px 5px black;
 }
 
 ul li h4 {
@@ -51,6 +78,15 @@ ul li h4 {
 
 ul button {
     cursor: pointer;
+    background-color: green;
+    padding-left: 8px;
+    padding-right: 8px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+}
+ul button:hover{
+    transform: scale(1.1);
 }
 
 .hide {
@@ -69,11 +105,10 @@ ul button {
     z-index: 10;
     width: 100vw;
     height: 100vh;
-    background: rgba(141, 131, 131, 0.3);
+    background: rgba(141, 131, 131, 0.478);
 }
 
 .content {
-    /* width: 100%; */
     height: 100%;
     margin: auto;
     display: flex;
@@ -82,13 +117,14 @@ ul button {
 }
 
 form {
-    width: 60vw;
+    width: 40vw;
     background-color: rebeccapurple;
     padding: 10px;
     border-radius: 8px;
     margin: auto;
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 form input {
@@ -99,3 +135,12 @@ form button {
     width: max-content;
     margin: auto;
 }
+
+
+
+
+
+
+
+
+
