@@ -24,7 +24,7 @@
 }
 
 .right {
-    padding: 40px 0;
+    padding: 40px 40px;
 }
 
 
@@ -147,19 +147,22 @@ form p:nth-last-child(1) {
     text-align: center;
 }
 
-span{
+span {
     font-size: 72px;
-     display:inline-block;
-    transform:rotateY(180deg) ; 
+    transform: scale(-1,1);
+    display: inline-block;
+    letter-spacing: -0.2em;
 }
 
 @media only screen and (max-width: 780px) {
     .main {
         grid-template-columns: 1fr;
     }
+
     .right {
         padding: 0;
     }
+
     form {
         padding: 2rem 5rem;
         gap: 20px;
