@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Painttool</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <button class="status">Brush</button>
+
+        <div class="toolarea">
+            <div class="brush">
+                <i class="bi bi-brush-fill"></i>
+                <div class="col">
+                    <input type="color">
+                    <p class="brushColorText"></p>
+                </div>
+            </div>
+            <div class="range">
+                <h2>10</h2>
+                <input type="range" min="1" max="50">
+            </div>
+            <div class="bgcolor">
+                <div class="col">
+                    <input type="color">
+                    <p class="bgcolorText"></p>
+                </div>
+            </div>
+            <i class="bi bi-eraser-fill"></i>
+            <i class="bi bi-arrow-clockwise"></i>
+            <i class="bi bi-cloud-arrow-down-fill"></i>
+            <i class="bi bi-cloud-arrow-up-fill"></i>
+            <i class="bi bi-trash"></i>
+            <i class="bi bi-save"></i>
+        </div>
+        <div class="drawingarea">
+            <canvas id="canvas">
+
+            </canvas>
+        </div>
+
+        <script src="script.js"></script>
+</body>
+
+</html>
