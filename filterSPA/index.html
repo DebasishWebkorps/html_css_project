@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Filter App</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="filter">
+            <h3>Filter</h3>
+            <p for="">Types</p>
+            <label><input onclick="filterHandler(event)" type="checkbox" name="" id="" value="Shirts">Shirts</label>
+            <label><input onclick="filterHandler(event)" type="checkbox" name="" id="" value="Jeans">Jeans</label>
+
+            <p for="">Sizes</p>
+            <label><input onclick="filterHandler(event)" type="checkbox" name="" id="" value="Small">Small</label>
+            <label><input onclick="filterHandler(event)" type="checkbox" name="" id="" value="Medium">Medium</label>
+            <label><input onclick="filterHandler(event)" type="checkbox" name="" id="" value="Large">Large</label>
+
+            <button onclick="clearFilter()">Clear Filter</button>
+
+            <h6 class="status">Showing <span id="totalResults">0</span> results</h6>
+        </div>
+        <div class="content">
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
