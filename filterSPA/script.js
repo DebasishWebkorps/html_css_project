@@ -174,6 +174,9 @@ function getData(obj) {
         filteredArray = array.filter(data => obj.types[data.category] === true)
     } else if (isSizes && !isType) {
         filteredArray = array.filter(data => obj.sizes[data.size] === true)
+    }else{
+        showAllData()
+        return
     }
 
     filteredArray.map(data => {
@@ -196,7 +199,7 @@ function clearFilter() {
     while (content.firstChild) {
         content.removeChild(content.firstChild)
     }
-    
+
     showAllData()
 
 }

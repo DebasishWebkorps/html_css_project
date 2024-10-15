@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Form Validation</title>
+</head>
+
+<body>
+
+    <div class="error">
+
+    </div>
+
+    <div class="container">
+        <form action="#">
+            <h2>Registration Form</h2>
+            <div id="nameDiv">
+                <label for="nameId">Name <span>:</span> </label>
+                <input type="text" name="name" id="nameId">
+            </div>
+            <div id="emailDiv">
+                <label for="emailId">Email <span>:</span> </label>
+                <input type="text" name="email" id="emailId">
+            </div>
+            <div id="pwDiv">
+                <label for="pwId">Password <span>:</span> </label>
+                <input type="password" name="password" id="pwId">
+            </div>
+            <div id="phnoDiv">
+                <label for="phnoId">Phone No <span>:</span> </label>
+                <input type="number" name="phooneno" id="phnoId">
+            </div>
+            <div id="genderDiv">
+                <label for="genderId"> Gender <span>:</span> </label>
+                <label for="maleid">
+                    <input type="radio" name="gender" id="maleid" value="Male">
+                    Male
+                </label>
+
+                <label for="femaleid">
+                    <input type="radio" name="gender" id="femaleid" value="Female">
+                    Female
+                </label>
+            </div>
+            <div id="languageDiv">
+                <label for="languageId">Language <span>:</span> </label>
+
+                <label for="enid">
+                    <input type="checkbox" name="language" id="enid" value="English">
+                    English
+                </label>
+                <label for="hiid">
+                    <input type="checkbox" name="language" id="hiid" value="Hindi">
+                    Hindi
+                </label>
+                <label for="odid">
+                    <input type="checkbox" name="language" id="odid" value="Odia">
+                    Odia
+                </label>
+                <label for="teid">
+                    <input type="checkbox" name="language" id="teid" value="Telugu">
+                    Telugu
+                </label>
+                <label for="kaid">
+                    <input type="checkbox" name="language" id="kaid" value="Kanada">
+                    Kanada
+                </label>
+            </div>
+            <div id="professionDiv">
+                <label for="professionId">Profession <span>:</span> </label>
+                <select name="profession" id="professionId">
+                    <option value="">Select</option>
+                    <option value="Student">Student</option>
+                    <option value="Self Employed">Self Employed</option>
+                    <option value="Govenment Job">Govenment Job</option>
+                    <option value="Private Job">Private Job</option>
+                    <option value="Retired">Retired</option>
+                </select>
+            </div>
+            <button type="submit" id="signupBtn">Signup</button>
+        </form>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
