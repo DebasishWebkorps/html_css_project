@@ -6,17 +6,18 @@
 
 body {
     width: 100vw;
-    height: 100vh;
-    display: flex;
+    /* height: 100vh; */
+    /* display: flex;
     justify-content: center;
-    align-items: center;
-    position: relative;
+    align-items: center; */
+    /* position: relative; */
     background-color: rgba(0, 255, 255, 0.13);
 }
 
 
 .container {
     width: 50vw;
+    margin: 5vh auto;
     box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
     border-radius: 6px;
 }
@@ -134,4 +135,64 @@ form div label:nth-child(1) {
     right: 10px;
     display: none;
     border-radius: 6px;
+}
+
+
+.userData {
+    width: 90vw;
+    margin: auto;
+}
+
+.regUser {
+    text-align: center;
+    text-decoration: underline;
+    margin: 2rem 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid rgb(45, 219, 59);
+    box-shadow: 1px 1px 6px black;
+}
+
+table thead tr:nth-child(1) {
+    line-height: 2rem;
+    border-bottom: 1px solid rgb(45, 219, 59);
+    background-color: blue;
+    color: white;
+    /* border-bottom: 1px solid brown; */
+    position: sticky;
+    top: 0;
+}
+
+table tbody tr {
+    text-align: center;
+    line-height: 2rem;
+}
+
+table tbody tr:hover {
+    cursor: pointer;
+    line-height: 3rem;
+}
+
+
+table tbody tr:nth-child(odd) {
+    background-color:white;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #D6EEEE;
+}
+
+table th {
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.logout {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 1rem;
 }

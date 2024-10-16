@@ -1,0 +1,94 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(142, 162, 243);
+}
+
+
+form {
+    padding: 15px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.61);
+    border-radius: 6px;
+}
+
+
+form h4 {
+    text-align: center;
+    text-decoration: underline;
+}
+
+form div {
+    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    margin: 15px 0;
+}
+
+form div p {
+    grid-column: 2 / span 5;
+    color: white;
+    background-color: rgba(255, 0, 0, 0.8);
+    padding: 6px;
+    border-radius: 6px;
+    width: max-content;
+}
+
+form div label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: monospace;
+    font-weight: bold;
+    cursor: pointer;
+    padding-right: 12px;
+}
+
+form div input[type="text"],
+form div input[type="password"] {
+    cursor: auto;
+    grid-column: 2 / span 5;
+    height: 36px;
+    border: none;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    padding: 0 12px;
+    border-radius: 6px;
+}
+
+
+form div input:focus {
+    outline: none;
+    border: 1px solid rgba(255, 0, 255, 0.258);
+}
+
+
+button {
+    display: flex;
+    background-color: rgb(61, 226, 61);
+    color: black;
+    border: none;
+    margin: 3vh auto;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+
+button:hover {
+    background-color: rgb(27, 175, 27);
+    color: white;
+}
+
+button:active {
+    scale: 0.9;
+}
