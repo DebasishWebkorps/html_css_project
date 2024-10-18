@@ -36,6 +36,7 @@ logout.addEventListener('click', () => {
 
 
 document.addEventListener('DOMContentLoaded', () => {
+    localStorage.removeItem('data')
 
     const isAuthorize = localStorage.getItem('isLogin') || null
     if (!isAuthorize) {
@@ -64,6 +65,9 @@ function switchToSecondPage() {
         // }
 
         // switchToSecondPage()
+
+
+
 
 
         const cityDiv = document.createElement('div')
@@ -121,7 +125,13 @@ function switchToSecondPage() {
 
 
         const addressBtn = document.createElement('button')
-        addressBtn.innerHTML = "Add Address"
+
+        const data = localStorage.getItem('data') || null
+        if (data) {
+            addressBtn.innerHTML = "Save Data"
+        } else {
+            addressBtn.innerHTML = "Add Data"
+        }
         addressBtn.setAttribute('id', 'addressBtn')
 
 
@@ -131,6 +141,16 @@ function switchToSecondPage() {
         form.appendChild(countryDiv)
         form.appendChild(pincodeDiv)
         form.appendChild(addressBtn)
+
+
+        const isData = localStorage.getItem('data') || null
+        if (isData) {
+            const data = JSON.parse(isData)
+
+            cityInput.value = data.city
+            countrySelect.value = data.country
+            pincodeNumber.value = data.pincode
+        }
 
     }
 }
@@ -188,14 +208,20 @@ async function addressHandler() {
     formObj.pincode = pincode.value
 
 
+
+    const btn = document.querySelector('#addressBtn')
+    btn.innerHTML = "Sending..."
+
+
+
     saveData()
 
 
     // alert('Address added Successfully')
 
-    city.value = ''
-    country.value = ''
-    pincode.value = ''
+    // city.value = ''
+    // country.value = ''
+    // pincode.value = ''
 
     // console.log(addressObj)
 }
@@ -279,8 +305,82 @@ async function addressHandler() {
 
 // })
 
+async function updateData(data) {
+    const { _id } = JSON.parse(data)
+    try {
+        const user = localStorage.getItem('useremail')
+        const response = await fetch('http://www.localhost:3000/', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                userInfo: user
+            },
+            body: JSON.stringify({ formObj, uid: _id })
+        })
+        const data = await response.json()
+        if (!response.ok) {
+            throw new Error(data.message)
+        }
+
+        const { updatedData } = data
+        alert(data.message)
+        // appendLive(data.formData)
+        updateRow(updatedData)
+
+    } catch (err) {
+        // console.error(err.message)
+
+        if (err.message !== 'data is not defined') {
+            alert('Some error occured')
+        }
+        // alert('Some Error Occured')
+    } finally {
+        const btn = document.querySelector('#addressBtn')
+        btn.innerHTML = "Update Data"
+        return
+    }
+
+
+}
+
+
+function updateRow(data) {
+
+    const target = +localStorage.getItem('row') + 1
+    const allRow = document.querySelectorAll('tr')
+
+    allRow.forEach((row, idx) => {
+        if (idx === target) {
+            while (row.firstChild) {
+                row.removeChild(row.firstChild)
+            }
+
+            const values = Object.values(data)
+            values.forEach((val, idx) => {
+                if (idx > 0 && idx < 11) {
+                    const td = document.createElement('td')
+                    if (idx === 3) {
+                        td.innerHTML = '*'.repeat(val.length)
+                    } else {
+                        td.innerHTML = val
+                    }
+                    row.appendChild(td)
+                }
+            })
+        }
+    })
+
+
+
+
+}
 
 async function saveData() {
+    const data = localStorage.getItem('data') || null
+    if (data) {
+        await updateData(data)
+        return
+    }
     try {
         const user = localStorage.getItem('useremail')
         const response = await fetch('http://www.localhost:3000/', {
@@ -295,13 +395,86 @@ async function saveData() {
         if (!response.ok) {
             throw new Error(data.message)
         }
+
+        const { formData } = data
         alert(data.message)
-        addNewUser(data.formData)
+        // appendLive(data.formData)
+        appendLive(formData)
 
     } catch (err) {
-        console.error(err.message)
+        // console.error(err.message)
+
+        if (err.message !== 'data is not defined') {
+            alert('Some error occured')
+        }
         // alert('Some Error Occured')
+    } finally {
+        const btn = document.querySelector('#addressBtn')
+        btn.innerHTML = "Add Data"
     }
+}
+
+
+function appendLive(user) {
+
+
+    const city = document.querySelector('#city')
+    const country = document.querySelector('#country')
+    const pincode = document.querySelector('#pincode')
+
+
+    city.value = ''
+    country.value = ''
+    pincode.value = ''
+
+
+    const tbody = document.querySelector('#userbody')
+
+    const tr_body = document.createElement('tr')
+    tr_body.setAttribute('id', user._id)
+
+    const td_1 = document.createElement('td')
+    const td_2 = document.createElement('td')
+    const td_3 = document.createElement('td')
+    const td_4 = document.createElement('td')
+    const td_5 = document.createElement('td')
+    const td_6 = document.createElement('td')
+    const td_7 = document.createElement('td')
+    const td_8 = document.createElement('td')
+    const td_9 = document.createElement('td')
+    const td_10 = document.createElement('td')
+
+
+    td_1.innerHTML = user.Fullname
+    td_2.innerHTML = user.Email
+    td_3.innerHTML = '*'.repeat(user.Password.length)
+    td_4.innerHTML = user.PhoneNo
+    td_5.innerHTML = user.Gender
+    td_6.innerHTML = user.Language.join(' , ')
+    td_7.innerHTML = user.Profession
+    td_8.innerHTML = user.city
+    td_9.innerHTML = user.country
+    td_10.innerHTML = user.pincode
+
+    tr_body.appendChild(td_1)
+    tr_body.appendChild(td_2)
+    tr_body.appendChild(td_3)
+    tr_body.appendChild(td_4)
+    tr_body.appendChild(td_5)
+    tr_body.appendChild(td_6)
+    tr_body.appendChild(td_7)
+    tr_body.appendChild(td_8)
+    tr_body.appendChild(td_9)
+    tr_body.appendChild(td_10)
+
+    // tr_body.addEventListener('click', () => {
+    //     listClickHandler(user)
+    // })
+
+    tbody.appendChild(tr_body)
+
+
+    console.log(data, tbody)
 }
 
 
@@ -549,55 +722,6 @@ function errorHandler(msg) {
 }
 
 
-
-
-
-
-
-function addNewUser(user) {
-    const tbody = document.createElement('tbody') || null
-    if (!tbody) {
-        window.location.reload()
-    }
-
-    const tr_body = document.createElement('tr')
-
-    const td_1 = document.createElement('td')
-    const td_2 = document.createElement('td')
-    const td_3 = document.createElement('td')
-    const td_4 = document.createElement('td')
-    const td_5 = document.createElement('td')
-    const td_6 = document.createElement('td')
-    const td_7 = document.createElement('td')
-    const td_8 = document.createElement('td')
-    const td_9 = document.createElement('td')
-    const td_10 = document.createElement('td')
-
-
-    td_1.innerHTML = user.Fullname
-    td_2.innerHTML = user.Email
-    td_3.innerHTML = '*'.repeat(user.Password.length)
-    td_4.innerHTML = user.PhoneNo
-    td_5.innerHTML = user.Gender
-    td_6.innerHTML = user.Language.join(' , ')
-    td_7.innerHTML = user.Profession
-    td_8.innerHTML = user.city
-    td_9.innerHTML = user.country
-    td_10.innerHTML = user.pincode
-
-    tr_body.appendChild(td_1)
-    tr_body.appendChild(td_2)
-    tr_body.appendChild(td_3)
-    tr_body.appendChild(td_4)
-    tr_body.appendChild(td_5)
-    tr_body.appendChild(td_6)
-    tr_body.appendChild(td_7)
-    tr_body.appendChild(td_8)
-    tr_body.appendChild(td_9)
-    tr_body.appendChild(td_10)
-
-    tbody.appendChild(tr_body)
-}
 
 
 

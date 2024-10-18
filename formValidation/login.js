@@ -115,8 +115,17 @@ form.addEventListener('submit', async (event) => {
         // addNewUser(data.formData)
 
     } catch (err) {
-        console.error(err.message)
-        // alert('Some Error Occured')
+        alert(err.message)
+
+        if(err.message === 'No Such User Found') {
+            email.focus()
+            showError(emailDiv, 'No Such User Found')
+        }
+
+        if(err.message === 'Invalid Credentials') {
+            password.focus()
+            showError(pwDiv, 'Invalid Credentials')
+        }
     }
 
 

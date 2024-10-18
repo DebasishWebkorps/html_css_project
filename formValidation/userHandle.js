@@ -80,12 +80,13 @@ function listUsers(data) {
 
 
 
-    data.forEach(user => {
-        addNewUser(user)
+    data.forEach((user,idx) => {
+        addNewUser(user,idx)
     });
 
-    function addNewUser(user) {
+    function addNewUser(user,idx) {
         const tr_body = document.createElement('tr')
+        tr_body.setAttribute('id',user._id)
 
         const td_1 = document.createElement('td')
         const td_2 = document.createElement('td')
@@ -122,7 +123,7 @@ function listUsers(data) {
         tr_body.appendChild(td_10)
 
         tr_body.addEventListener('click', () => {
-            listClickHandler(user)
+            listClickHandler(user,idx)
         })
 
         tbody.appendChild(tr_body)
@@ -139,8 +140,16 @@ function listUsers(data) {
 
 
 
-function listClickHandler(data) {
+function listClickHandler(data,idx) {
     // console.log(data)
+
+    localStorage.setItem('data',JSON.stringify(data))
+    localStorage.setItem('row',idx)
+
+    const btn = document.querySelector('#signupBtn')
+    btn.innerHTML = 'Update'
+
+
 
     const nameText = document.querySelector('#nameId')
     const email = document.querySelector('#emailId')

@@ -15,18 +15,25 @@ app.use(express.json())
 dotenv.config()
 
 app.get('/', async (req, res) => {
+    try {
 
-    const { userinfo } = req.headers
-    const user = await User.findOne({ email: userinfo })
-    if (!user) {
-        return res.status(404).json({ message: 'No Such User' })
+        const { userinfo } = req.headers
+        const user = await User.findOne({ email: userinfo })
+        if (!user) {
+            return res.status(404).json({ message: 'No Such User' })
+        }
+
+        const response = await Formdata.find({
+            uid: user._id
+        })
+
+
+        return res.json(response)
+    } catch (err) {
+        console.log(err.message, 'get /')
+        return res.status(404).json({ message: 'Some Error Occured' })
+
     }
-
-    const response = await Formdata.find({
-        uid: user._id
-    })
-
-    res.json(response)
 })
 
 // app.get('/user', async (req, res) => {
@@ -41,30 +48,89 @@ app.get('/', async (req, res) => {
 // })
 
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body
-    const user = await User.findOne({ email })
-    if (!user) {
-        return res.status(404).json({ message: 'No User Found' })
+    try {
+        const { email, password } = req.body
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.status(404).json({ message: 'No Such User Found' })
+        }
+        if (user.password !== password) {
+            return res.status(500).json({ message: 'Invalid Credentials' })
+        }
+        return res.status(200).json({ message: 'Successfully Login' })
+    } catch (err) {
+        console.log(err.message, 'Post Login')
+        return res.json({ message: 'Some Error Occured' })
     }
-    if (user.password !== password) {
-        return res.status(500).json({ message: 'Invalid Credentials' })
-    }
-    return res.status(200).json({ message: 'Successfully Login' })
 })
 
 app.post('/signup', async (req, res) => {
-    const { email, password } = req.body
-    const user = new User({
-        email,
-        password
-    })
     try {
+        const { email, password } = req.body
+        const isExist = User.findOne({ email })
+        if (isExist) {
+            return res.status(404).json({ message: 'Existing User' })
+        }
+        const user = new User({
+            email,
+            password
+        })
         const userCred = await user.save()
         return res.status(201).json({ message: 'User Created Successfully', userCred })
     } catch (err) {
+        console.log(err.message,'post signup')
         return res.status(500).json({ message: 'Some Error Occured' })
     }
 })
+
+app.put('/', async (req, res) => {
+    const { userinfo } = req.headers
+    const user = await User.findOne({ email: userinfo })
+    if (!user) {
+        return res.status(404).json({ message: 'No Such User' })
+    }
+
+
+    const { Fullname,
+        Email,
+        Password,
+        PhoneNo,
+        Gender,
+        Language,
+        Profession,
+        city,
+        country,
+        pincode } = req.body.formObj
+
+    const { uid } = req.body
+
+    try {
+        const formData = await Formdata.updateOne({ _id: new mongoose.Types.ObjectId(uid) }, {
+            Fullname,
+            Email,
+            Password,
+            PhoneNo,
+            Gender,
+            Language,
+            Profession,
+            city,
+            country,
+            pincode
+        })
+
+
+        const updatedData = await Formdata.findOne({ _id: new mongoose.Types.ObjectId(uid) })
+        res.status(201).json({ message: 'Data Updated Successfully', updatedData })
+
+
+    } catch (err) {
+        console.log(err.message,'put /')
+        res.status(500).json({ message: 'Some Error Occured' })
+    }
+})
+
+
+
 
 
 app.post('/', async (req, res) => {
@@ -103,6 +169,7 @@ app.post('/', async (req, res) => {
         const formData = await form.save()
         res.status(201).json({ message: 'Data Saved Successfully', formData })
     } catch (err) {
+        console.log(err.message,'post /')
         res.status(500).json({ message: 'Some Error Occured' })
     }
 })
