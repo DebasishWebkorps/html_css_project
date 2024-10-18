@@ -154,6 +154,7 @@ table {
     border-collapse: collapse;
     border: 1px solid rgb(45, 219, 59);
     box-shadow: 1px 1px 6px black;
+    margin-bottom: 3rem;
 }
 
 table thead tr:nth-child(1) {

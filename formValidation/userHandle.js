@@ -25,7 +25,7 @@ async function getData() {
         listUsers(data)
     } catch (err) {
         regUser.innerHTML = 'Empty User Data'
-        console.log('some error occured')
+        console.log('some error occured', err.message)
     }
 }
 
@@ -39,91 +39,48 @@ function listUsers(data) {
     tbody.setAttribute('id', 'userbody')
 
     const tr = document.createElement('tr')
-    const th_1 = document.createElement('th')
-    const th_2 = document.createElement('th')
-    const th_3 = document.createElement('th')
-    const th_4 = document.createElement('th')
-    const th_5 = document.createElement('th')
-    const th_6 = document.createElement('th')
-    const th_7 = document.createElement('th')
-    const th_8 = document.createElement('th')
-    const th_9 = document.createElement('th')
-    const th_10 = document.createElement('th')
 
-    th_1.innerHTML = 'Full Name'
-    th_2.innerHTML = 'Email'
-    th_3.innerHTML = 'Password'
-    th_4.innerHTML = 'Phone No'
-    th_5.innerHTML = 'Gender'
-    th_6.innerHTML = 'Language'
-    th_7.innerHTML = 'Profession'
-    th_8.innerHTML = 'City'
-    th_9.innerHTML = 'Country'
-    th_10.innerHTML = 'Pincode'
 
-    tr.appendChild(th_1)
-    tr.appendChild(th_2)
-    tr.appendChild(th_3)
-    tr.appendChild(th_4)
-    tr.appendChild(th_5)
-    tr.appendChild(th_6)
-    tr.appendChild(th_7)
-    tr.appendChild(th_8)
-    tr.appendChild(th_9)
-    tr.appendChild(th_10)
+    const headings = [
+        'Full Name', 'Email', 'Password', 'Phone No', 'Gender',
+        'Language', 'Profession', 'City', 'Country', 'Pincode'
+    ]
+
+    headings.forEach(heading => {
+        const th = document.createElement('th')
+        th.innerText = heading
+        tr.appendChild(th)
+    })
+
+
 
     thead.appendChild(tr)
 
     table.appendChild(thead)
 
-
-
-
-
-    data.forEach((user,idx) => {
-        addNewUser(user,idx)
+    data.forEach((user, idx) => {
+        addNewUser(user, idx)
     });
 
-    function addNewUser(user,idx) {
+    function addNewUser(user, idx) {
         const tr_body = document.createElement('tr')
-        tr_body.setAttribute('id',user._id)
-
-        const td_1 = document.createElement('td')
-        const td_2 = document.createElement('td')
-        const td_3 = document.createElement('td')
-        const td_4 = document.createElement('td')
-        const td_5 = document.createElement('td')
-        const td_6 = document.createElement('td')
-        const td_7 = document.createElement('td')
-        const td_8 = document.createElement('td')
-        const td_9 = document.createElement('td')
-        const td_10 = document.createElement('td')
+        tr_body.setAttribute('id', user._id)
 
 
-        td_1.innerHTML = user.Fullname
-        td_2.innerHTML = user.Email
-        td_3.innerHTML = '*'.repeat(user.Password.length)
-        td_4.innerHTML = user.PhoneNo
-        td_5.innerHTML = user.Gender
-        td_6.innerHTML = user.Language.join(' , ')
-        td_7.innerHTML = user.Profession
-        td_8.innerHTML = user.city
-        td_9.innerHTML = user.country
-        td_10.innerHTML = user.pincode
+        for (let key of Object.keys(user)) {
+            if (key === '_id' || key === 'uid' || key === '__v') continue
+            const td = document.createElement('td')
+            if (key !== 'Password') {
+                td.innerHTML = user[key]
+            } else {
+                td.innerHTML = '*'.repeat(user[key].length)
+            }
+            tr_body.appendChild(td)
+        }
 
-        tr_body.appendChild(td_1)
-        tr_body.appendChild(td_2)
-        tr_body.appendChild(td_3)
-        tr_body.appendChild(td_4)
-        tr_body.appendChild(td_5)
-        tr_body.appendChild(td_6)
-        tr_body.appendChild(td_7)
-        tr_body.appendChild(td_8)
-        tr_body.appendChild(td_9)
-        tr_body.appendChild(td_10)
 
         tr_body.addEventListener('click', () => {
-            listClickHandler(user,idx)
+            listClickHandler(user, idx)
         })
 
         tbody.appendChild(tr_body)
@@ -140,11 +97,11 @@ function listUsers(data) {
 
 
 
-function listClickHandler(data,idx) {
+function listClickHandler(data, idx) {
     // console.log(data)
 
-    localStorage.setItem('data',JSON.stringify(data))
-    localStorage.setItem('row',idx)
+    localStorage.setItem('data', JSON.stringify(data))
+    localStorage.setItem('row', idx)
 
     const btn = document.querySelector('#signupBtn')
     btn.innerHTML = 'Update'
@@ -168,7 +125,7 @@ function listClickHandler(data,idx) {
     gender.forEach(item => {
         if (item.value === data.Gender) {
             item.checked = true
-        }else{
+        } else {
             item.checked = false
         }
     })
@@ -178,7 +135,7 @@ function listClickHandler(data,idx) {
     language.forEach(item => {
         if (data.Language.includes(item.value)) {
             item.checked = true
-        }else{
+        } else {
             item.checked = false
         }
     })

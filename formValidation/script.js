@@ -56,19 +56,11 @@ function showError(div, msg) {
 }
 
 function switchToSecondPage() {
-    // if (page === 1) {
     if (page++ === 1) {
         divs.forEach(div => {
             form.removeChild(div)
         })
         form.removeChild(signupBtn)
-        // }
-
-        // switchToSecondPage()
-
-
-
-
 
         const cityDiv = document.createElement('div')
         cityDiv.setAttribute('id', 'cityDiv')
@@ -89,23 +81,14 @@ function switchToSecondPage() {
         countrySelect.setAttribute('id', 'country')
         countryLabel.innerHTML = "Country"
 
-        const optOne = document.createElement('option')
-        optOne.value = ''
-        optOne.innerHTML = 'Select'
-        const optTwo = document.createElement('option')
-        optTwo.value = 'INDIA'
-        optTwo.innerHTML = 'INDIA'
-        const optThree = document.createElement('option')
-        optThree.value = 'US'
-        optThree.innerHTML = 'US'
-        const optFour = document.createElement('option')
-        optFour.value = 'London'
-        optFour.innerHTML = 'London'
+        const countries = ['Select', 'INDIA', 'US', 'London']
 
-        countrySelect.appendChild(optOne)
-        countrySelect.appendChild(optTwo)
-        countrySelect.appendChild(optThree)
-        countrySelect.appendChild(optFour)
+        countries.forEach(country => {
+            const option = document.createElement('option')
+            option.value = country === 'Select' ? '' : country
+            option.innerHTML = country
+            countrySelect.appendChild(option)
+        })
 
 
         countryDiv.appendChild(countryLabel)
@@ -133,9 +116,6 @@ function switchToSecondPage() {
             addressBtn.innerHTML = "Add Data"
         }
         addressBtn.setAttribute('id', 'addressBtn')
-
-
-
 
         form.appendChild(cityDiv)
         form.appendChild(countryDiv)
@@ -197,113 +177,17 @@ async function addressHandler() {
         }
     }
 
-    // const addressObj = {
-    //     city: city.value,
-    //     country: country.value,
-    //     pincode: pincode.value
-    // }
-
     formObj.city = city.value
     formObj.country = country.value
     formObj.pincode = pincode.value
 
-
-
     const btn = document.querySelector('#addressBtn')
     btn.innerHTML = "Sending..."
 
-
-
     saveData()
 
-
-    // alert('Address added Successfully')
-
-    // city.value = ''
-    // country.value = ''
-    // pincode.value = ''
-
-    // console.log(addressObj)
 }
 
-
-// form.addEventListener('submit', (event) => {
-//     event.preventDefault()
-
-//     if (page++ === 1) {
-//     // switchToSecondPage()
-
-
-//         const cityDiv = document.createElement('div')
-//         cityDiv.setAttribute('id', 'cityDiv')
-//         const cityLabel = document.createElement('label')
-//         const cityInput = document.createElement('input')
-//         cityInput.setAttribute('id', 'city')
-//         cityInput.type = 'text'
-//         cityLabel.innerHTML = "City"
-
-//         cityDiv.appendChild(cityLabel)
-//         cityDiv.appendChild(cityInput)
-
-
-//         const countryDiv = document.createElement('div')
-//         countryDiv.setAttribute('id', 'countryDiv')
-//         const countryLabel = document.createElement('label')
-//         const countrySelect = document.createElement('select')
-//         countrySelect.setAttribute('id', 'country')
-//         countryLabel.innerHTML = "Country"
-
-//         const optOne = document.createElement('option')
-//         optOne.value = ''
-//         optOne.innerHTML = 'Select'
-//         const optTwo = document.createElement('option')
-//         optTwo.value = 'INDIA'
-//         optTwo.innerHTML = 'INDIA'
-//         const optThree = document.createElement('option')
-//         optThree.value = 'US'
-//         optThree.innerHTML = 'US'
-//         const optFour = document.createElement('option')
-//         optFour.value = 'London'
-//         optFour.innerHTML = 'London'
-
-//         countrySelect.appendChild(optOne)
-//         countrySelect.appendChild(optTwo)
-//         countrySelect.appendChild(optThree)
-//         countrySelect.appendChild(optFour)
-
-
-//         countryDiv.appendChild(countryLabel)
-//         countryDiv.appendChild(countrySelect)
-
-
-//         const pincodeDiv = document.createElement('div')
-//         pincodeDiv.setAttribute('id', 'pincodeDiv')
-//         const pincodeLabel = document.createElement('label')
-//         const pincodeNumber = document.createElement('input')
-//         pincodeNumber.setAttribute('id', 'pincode')
-//         pincodeLabel.innerHTML = "Pincode"
-//         pincodeNumber.type = 'number'
-
-//         pincodeDiv.appendChild(pincodeLabel)
-//         pincodeDiv.appendChild(pincodeNumber)
-
-
-//         const addressBtn = document.createElement('button')
-//         addressBtn.innerHTML = "Add Address"
-//         addressBtn.setAttribute('id', 'addressBtn')
-//         addressBtn.onclick = addressHandler
-
-
-
-
-//         form.appendChild(cityDiv)
-//         form.appendChild(countryDiv)
-//         form.appendChild(pincodeDiv)
-//         form.appendChild(addressBtn)
-
-//     }
-
-// })
 
 async function updateData(data) {
     const { _id } = JSON.parse(data)
@@ -433,53 +317,22 @@ function appendLive(user) {
     const tr_body = document.createElement('tr')
     tr_body.setAttribute('id', user._id)
 
-    const td_1 = document.createElement('td')
-    const td_2 = document.createElement('td')
-    const td_3 = document.createElement('td')
-    const td_4 = document.createElement('td')
-    const td_5 = document.createElement('td')
-    const td_6 = document.createElement('td')
-    const td_7 = document.createElement('td')
-    const td_8 = document.createElement('td')
-    const td_9 = document.createElement('td')
-    const td_10 = document.createElement('td')
-
-
-    td_1.innerHTML = user.Fullname
-    td_2.innerHTML = user.Email
-    td_3.innerHTML = '*'.repeat(user.Password.length)
-    td_4.innerHTML = user.PhoneNo
-    td_5.innerHTML = user.Gender
-    td_6.innerHTML = user.Language.join(' , ')
-    td_7.innerHTML = user.Profession
-    td_8.innerHTML = user.city
-    td_9.innerHTML = user.country
-    td_10.innerHTML = user.pincode
-
-    tr_body.appendChild(td_1)
-    tr_body.appendChild(td_2)
-    tr_body.appendChild(td_3)
-    tr_body.appendChild(td_4)
-    tr_body.appendChild(td_5)
-    tr_body.appendChild(td_6)
-    tr_body.appendChild(td_7)
-    tr_body.appendChild(td_8)
-    tr_body.appendChild(td_9)
-    tr_body.appendChild(td_10)
-
-    // tr_body.addEventListener('click', () => {
-    //     listClickHandler(user)
-    // })
+    for (let key of Object.keys(user)) {
+        if (key === '_id' || key === 'uid' || key === '__v') continue
+        const td = document.createElement('td')
+        if (key !== 'Password') {
+            td.innerHTML = user[key]
+        } else {
+            td.innerHTML = '*'.repeat(user[key].length)
+        }
+        tr_body.appendChild(td)
+    }
 
     tbody.appendChild(tr_body)
 
 
     console.log(data, tbody)
 }
-
-
-
-
 
 
 
@@ -665,17 +518,6 @@ form.addEventListener('submit', (event) => {
 
 
 
-    // alert('Successfully Submitted')
-    // const formObj = {
-    //     Fullname: nameText.value,
-    //     Email: email.value,
-    //     Password: password.value,
-    //     PhoneNo: phoneno.value,
-    //     Gender: '',
-    //     Language: [],
-    //     Profession: profession.value
-    // }
-
     formObj.Fullname = nameText.value
     formObj.Email = email.value
     formObj.Password = password.value
@@ -702,24 +544,24 @@ form.addEventListener('submit', (event) => {
 
 
 
-function errorHandler(msg) {
-    while (error.firstChild) {
-        error.removeChild(error.firstChild)
-    }
+// function errorHandler(msg) {
+//     while (error.firstChild) {
+//         error.removeChild(error.firstChild)
+//     }
 
-    error.style.display = 'block'
+//     error.style.display = 'block'
 
-    const p = document.createElement('p')
-    p.innerHTML = msg
+//     const p = document.createElement('p')
+//     p.innerHTML = msg
 
-    error.appendChild(p)
+//     error.appendChild(p)
 
-    setTimeout(() => {
-        error.style.display = 'none'
+//     setTimeout(() => {
+//         error.style.display = 'none'
 
-    }, 1000)
+//     }, 1000)
 
-}
+// }
 
 
 
