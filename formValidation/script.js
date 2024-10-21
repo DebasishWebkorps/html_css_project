@@ -145,7 +145,7 @@ async function addressHandler() {
 
 
     if (!city.value && !country.value && !pincode.value) {
-        showError(cityDiv, 'Please Write Somethindddg')
+        showError(cityDiv, 'Please Write Something')
         showError(countryDiv, 'Please Write Something')
         showError(pincodeDiv, 'Please Write Something')
         return
@@ -301,6 +301,13 @@ async function saveData() {
 
 function appendLive(user) {
 
+    const table = document.querySelector('table') || null
+    if (!table) {
+        newDataInsert(user)
+        return
+    }
+
+
 
     const city = document.querySelector('#city')
     const country = document.querySelector('#country')
@@ -331,7 +338,6 @@ function appendLive(user) {
     tbody.appendChild(tr_body)
 
 
-    console.log(data, tbody)
 }
 
 
@@ -563,6 +569,66 @@ form.addEventListener('submit', (event) => {
 
 // }
 
+
+
+function newDataInsert(user) {
+    const table = document.createElement('table')
+    const thead = document.createElement('thead')
+    const tbody = document.createElement('tbody')
+
+    tbody.setAttribute('id', 'userbody')
+
+    const tr = document.createElement('tr')
+
+
+    const headings = [
+        'Full Name', 'Email', 'Password', 'Phone No', 'Gender',
+        'Language', 'Profession', 'City', 'Country', 'Pincode',
+        // 'Delete'
+    ]
+
+    headings.forEach(heading => {
+        const th = document.createElement('th')
+        th.innerText = heading
+        tr.appendChild(th)
+    })
+
+
+
+    thead.appendChild(tr)
+
+    table.appendChild(thead)
+
+    const tr_body = document.createElement('tr')
+    tr_body.setAttribute('id', user._id)
+
+
+    for (let key of Object.keys(user)) {
+        if (key === '_id' || key === 'uid' || key === '__v') continue
+        const td = document.createElement('td')
+        if (key !== 'Password') {
+            td.innerHTML = user[key]
+        } else {
+            td.innerHTML = '*'.repeat(user[key].length)
+        }
+        tr_body.appendChild(td)
+    }
+
+
+    tr_body.addEventListener('click', () => {
+        listClickHandler(user, idx)
+    })
+
+    tbody.appendChild(tr_body)
+
+
+
+    table.appendChild(tbody)
+
+
+    userData.appendChild(table)
+
+}
 
 
 

@@ -78,7 +78,20 @@ app.post('/signup', async (req, res) => {
         const userCred = await user.save()
         return res.status(201).json({ message: 'User Created Successfully', userCred })
     } catch (err) {
-        console.log(err.message,'post signup')
+        console.log(err.message, 'post signup')
+        return res.status(500).json({ message: 'Some Error Occured' })
+    }
+})
+
+
+
+app.delete('/', async (req, res) => {
+    const { formid } = req.headers
+    try{
+        await Formdata.deleteOne({_id:new mongoose.Types.ObjectId(formid)})
+        return res.status(200).json({ message: 'Deleted Successfully' })
+    }catch(err){
+        console.log(err.message)
         return res.status(500).json({ message: 'Some Error Occured' })
     }
 })
@@ -124,7 +137,7 @@ app.put('/', async (req, res) => {
 
 
     } catch (err) {
-        console.log(err.message,'put /')
+        console.log(err.message, 'put /')
         res.status(500).json({ message: 'Some Error Occured' })
     }
 })
@@ -169,7 +182,7 @@ app.post('/', async (req, res) => {
         const formData = await form.save()
         res.status(201).json({ message: 'Data Saved Successfully', formData })
     } catch (err) {
-        console.log(err.message,'post /')
+        console.log(err.message, 'post /')
         res.status(500).json({ message: 'Some Error Occured' })
     }
 })

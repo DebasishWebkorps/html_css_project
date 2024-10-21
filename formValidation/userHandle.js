@@ -43,7 +43,8 @@ function listUsers(data) {
 
     const headings = [
         'Full Name', 'Email', 'Password', 'Phone No', 'Gender',
-        'Language', 'Profession', 'City', 'Country', 'Pincode'
+        'Language', 'Profession', 'City', 'Country', 'Pincode',
+        'Delete'
     ]
 
     headings.forEach(heading => {
@@ -51,6 +52,7 @@ function listUsers(data) {
         th.innerText = heading
         tr.appendChild(th)
     })
+
 
 
 
@@ -78,6 +80,16 @@ function listUsers(data) {
             tr_body.appendChild(td)
         }
 
+        const delbutton = document.createElement('button')
+        delbutton.style.background = 'red'
+        delbutton.style.color = 'white'
+        delbutton.innerHTML = 'Delete'
+        tr_body.appendChild(delbutton)
+
+        delbutton.addEventListener('click', () => {
+            deleteHandler(user._id, idx)
+        })
+
 
         tr_body.addEventListener('click', () => {
             listClickHandler(user, idx)
@@ -92,6 +104,54 @@ function listUsers(data) {
 
 
     userData.appendChild(table)
+
+}
+
+
+async function deleteHandler(id, idx) {
+    localStorage.setItem('deleteRow', idx)
+    const isDelete = confirm('Are you sure to delete it ?')
+    if (isDelete) {
+        try {
+            const user = localStorage.getItem('useremail')
+            const response = await fetch('http://www.localhost:3000/', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    formId: id
+                }
+            })
+            const data = await response.json()
+            if (!response.ok) {
+                throw new Error(data.message)
+            }
+
+            alert(data.message)
+            // appendLive(data.formData)
+            removeLive()
+
+        } catch (err) {
+            // console.error(err.message)
+
+            if (err.message !== 'data is not defined') {
+                alert('Some error occured')
+            }
+            // alert('Some Error Occured')
+        }
+    }
+}
+
+
+function removeLive() {
+    const removeRow = +localStorage.getItem('deleteRow') + 1
+
+    const allRow = document.querySelectorAll('tr')
+
+    allRow.forEach((row, idx) => {
+        if (idx === removeRow) {
+            row.remove()
+        }
+    })
 
 }
 
