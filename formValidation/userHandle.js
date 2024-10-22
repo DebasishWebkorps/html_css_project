@@ -10,10 +10,11 @@ window.addEventListener('DOMContentLoaded', getData)
 
 async function getData() {
     try {
-        const user = localStorage.getItem('useremail')
+        const token = localStorage.getItem('userToken')
+        // const user = localStorage.getItem('useremail')
         const response = await fetch('http://www.localhost:3000/', {
             headers: {
-                userInfo: user
+                userInfo: token
             }
         })
         const data = await response.json()
@@ -24,6 +25,9 @@ async function getData() {
         }
         listUsers(data)
     } catch (err) {
+        if (err.message === 'Invalid Token') {
+            window.location.href = "http://127.0.0.1:5500/formValidation/login.html"
+        }
         regUser.innerHTML = 'Empty User Data'
         console.log('some error occured', err.message)
     }
@@ -86,7 +90,8 @@ function listUsers(data) {
         delbutton.innerHTML = 'Delete'
         tr_body.appendChild(delbutton)
 
-        delbutton.addEventListener('click', () => {
+        delbutton.addEventListener('click', (event) => {
+            event.stopPropagation()
             deleteHandler(user._id, idx)
         })
 
@@ -108,37 +113,67 @@ function listUsers(data) {
 }
 
 
+async function isValidUser() {
+    try {
+        const token = localStorage.getItem('userToken')
+        // const user = localStorage.getItem('useremail')
+        const response = await fetch('http://www.localhost:3000/isvalid', {
+            headers: {
+                userInfo: token
+            }
+        })
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.message)
+        if (data.message === 'Valid Token') {
+            return true
+        }
+    } catch (err) {
+        alert('You are not allowed to do these operation')
+        localStorage.clear()
+        window.location.href = "http://127.0.0.1:5500/formValidation/login.html"
+        return false
+    }
+}
+
 async function deleteHandler(id, idx) {
-    localStorage.setItem('deleteRow', idx)
-    const isDelete = confirm('Are you sure to delete it ?')
-    if (isDelete) {
-        try {
-            const user = localStorage.getItem('useremail')
-            const response = await fetch('http://www.localhost:3000/', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    formId: id
+    const isAllowed = await isValidUser()
+    if (isAllowed) {
+
+
+
+        localStorage.setItem('deleteRow', idx)
+        const isDelete = confirm('Are you sure to delete it ?')
+        if (isDelete) {
+            try {
+                const user = localStorage.getItem('useremail')
+                const response = await fetch('http://www.localhost:3000/', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        formId: id
+                    }
+                })
+                const data = await response.json()
+                if (!response.ok) {
+                    throw new Error(data.message)
                 }
-            })
-            const data = await response.json()
-            if (!response.ok) {
-                throw new Error(data.message)
+
+                alert(data.message)
+                localStorage.removeItem('deleteRow')
+                // appendLive(data.formData)
+                removeLive()
+
+            } catch (err) {
+                // console.error(err.message)
+
+                if (err.message !== 'data is not defined') {
+                    alert('Some error occured')
+                }
+                // alert('Some Error Occured')
             }
-
-            alert(data.message)
-            // appendLive(data.formData)
-            removeLive()
-
-        } catch (err) {
-            // console.error(err.message)
-
-            if (err.message !== 'data is not defined') {
-                alert('Some error occured')
-            }
-            // alert('Some Error Occured')
         }
     }
+
 }
 
 

@@ -6,10 +6,35 @@ const pwDiv = document.querySelector('#pwDiv')
 
 const pageInfo = document.querySelector('#pageInfo')
 
-document.addEventListener('DOMContentLoaded',()=>{
-    const isAuthorize = localStorage.getItem('isLogin') || null
-    if(isAuthorize){
-        window.location.href = "http://127.0.0.1:5500/formValidation/index.html"
+document.addEventListener('DOMContentLoaded', async () => {
+    const isAuthorize = localStorage.getItem('userToken') || null
+    // const isAuthorize = localStorage.getItem('isLogin') || null
+    //     if (isAuthorize) {
+    //         window.location.href = "http://127.0.0.1:5500/formValidation/index.html"
+    //     }
+
+
+    if (isAuthorize) {
+
+        try {
+            const token = localStorage.getItem('userToken')
+            // const user = localStorage.getItem('useremail')
+            const response = await fetch('http://www.localhost:3000/isvalid', {
+                headers: {
+                    userInfo: token
+                }
+            })
+            const data = await response.json()
+            if (!response.ok) throw new Error(data.message)
+                if (data.message === 'Valid Token') {
+                    window.location.href = "http://127.0.0.1:5500/formValidation/index.html"
+                }
+        } catch (err) {
+            if (err.message === 'Invalid Token') {
+                // window.location.href = "http://127.0.0.1:5500/formValidation/login.html"
+                localStorage.removeItem('userToken')
+            }
+        }
     }
 })
 
@@ -86,6 +111,10 @@ form.addEventListener('submit', async (event) => {
 
     }
 
+    email.setAttribute('id','emailId')
+    const emId = email.getAttribute('id')
+    console.log('emailID',emId)
+
     const user = {
         email: email.value,
         password: password.value
@@ -108,8 +137,9 @@ form.addEventListener('submit', async (event) => {
         }
         alert(data.message)
         if (data.message === 'Successfully Login') {
-            localStorage.setItem('isLogin', true)
-            localStorage.setItem('useremail',user.email)
+            localStorage.setItem('userToken', data.token)
+            // localStorage.setItem('isLogin', true)
+            // localStorage.setItem('useremail',user.email)
             window.location.href = "http://127.0.0.1:5500/formValidation/index.html"
         }
         // addNewUser(data.formData)
@@ -117,12 +147,12 @@ form.addEventListener('submit', async (event) => {
     } catch (err) {
         alert(err.message)
 
-        if(err.message === 'No Such User Found') {
+        if (err.message === 'No Such User Found') {
             email.focus()
             showError(emailDiv, 'No Such User Found')
         }
 
-        if(err.message === 'Invalid Credentials') {
+        if (err.message === 'Invalid Credentials') {
             password.focus()
             showError(pwDiv, 'Invalid Credentials')
         }

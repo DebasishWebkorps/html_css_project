@@ -30,18 +30,21 @@ let page = 1
 
 logout.addEventListener('click', () => {
     localStorage.removeItem('isLogin')
-    localStorage.removeItem('useremail')
+    // localStorage.removeItem('useremail')
+    localStorage.removeItem('userToken')
     window.location.href = "http://127.0.0.1:5500/formValidation/login.html"
 })
 
 
 document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('data')
+    localStorage.removeItem('row')
+    localStorage.removeItem('deleteRow')
 
-    const isAuthorize = localStorage.getItem('isLogin') || null
-    if (!isAuthorize) {
-        window.location.href = "http://127.0.0.1:5500/formValidation/login.html"
-    }
+    // const isAuthorize = localStorage.getItem('isLogin') || null
+    // if (!isAuthorize) {
+    //     window.location.href = "http://127.0.0.1:5500/formValidation/login.html"
+    // }
 })
 
 function showError(div, msg) {
@@ -192,19 +195,29 @@ async function addressHandler() {
 async function updateData(data) {
     const { _id } = JSON.parse(data)
     try {
-        const user = localStorage.getItem('useremail')
+        const userToken = localStorage.getItem('userToken')
+
+        // const user = localStorage.getItem('useremail')
         const response = await fetch('http://www.localhost:3000/', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                userInfo: user
+                userToken
             },
             body: JSON.stringify({ formObj, uid: _id })
         })
         const data = await response.json()
+        if (data.message === 'Invalid Token') {
+            localStorage.removeItem('userToken')
+            alert('You are not authorized to update data')
+            window.location.href = "http://127.0.0.1:5500/formValidation/index.html"
+            return
+        }
+
         if (!response.ok) {
             throw new Error(data.message)
         }
+
 
         const { updatedData } = data
         alert(data.message)
@@ -251,6 +264,13 @@ function updateRow(data) {
                     row.appendChild(td)
                 }
             })
+            const delbutton = document.createElement('button')
+            delbutton.style.background = 'red'
+            delbutton.style.color = 'white'
+            delbutton.innerHTML = 'Delete'
+
+            row.appendChild(delbutton)
+
         }
     })
 
@@ -259,19 +279,49 @@ function updateRow(data) {
 
 }
 
+
+async function isValidUser() {
+    try {
+        const token = localStorage.getItem('userToken')
+        // const user = localStorage.getItem('useremail')
+        const response = await fetch('http://www.localhost:3000/isvalid', {
+            headers: {
+                userInfo: token
+            }
+        })
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.message)
+        if (data.message === 'Valid Token') {
+            return true
+        }
+    } catch (err) {
+        alert('You are not allowed to do these operation')
+        localStorage.clear()
+        window.location.href = "http://127.0.0.1:5500/formValidation/login.html"
+        return false
+    }
+}
+
+
+
 async function saveData() {
+    const isAllowed = await isValidUser()
+    if(!isAllowed){
+        return
+    }
     const data = localStorage.getItem('data') || null
     if (data) {
         await updateData(data)
         return
     }
     try {
-        const user = localStorage.getItem('useremail')
+        const userToken = localStorage.getItem('userToken')
+        // const user = localStorage.getItem('useremail')
         const response = await fetch('http://www.localhost:3000/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                userInfo: user
+                userToken
             },
             body: JSON.stringify(formObj)
         })
@@ -286,7 +336,7 @@ async function saveData() {
         appendLive(formData)
 
     } catch (err) {
-        // console.error(err.message)
+        console.error(err.message)
 
         if (err.message !== 'data is not defined') {
             alert('Some error occured')
@@ -334,6 +384,17 @@ function appendLive(user) {
         }
         tr_body.appendChild(td)
     }
+    
+    const td = document.createElement('td')
+    
+    
+    const deleteButton = document.createElement('button')
+    deleteButton.style.background = 'red'
+    deleteButton.style.color = 'white'
+    deleteButton.innerHTML = 'Delete'
+    
+    td.appendChild(deleteButton)
+    tr_body.appendChild(td)
 
     tbody.appendChild(tr_body)
 

@@ -6,6 +6,9 @@ const mongoose = require('mongoose')
 const Formdata = require('./formSchema')
 const User = require('./userSchema')
 
+const jwt = require('jsonwebtoken')
+
+
 const app = express()
 
 app.use(cors())
@@ -14,21 +17,49 @@ app.use(express.json())
 
 dotenv.config()
 
+app.get('/isvalid', async (req, res) => {
+    try {
+        const { userinfo } = req.headers
+
+        jwt.verify(userinfo, process.env.secret_password, async function (err, decoded) {
+            if (err) {
+                return res.status(404).json({ message: 'Invalid Token' })
+            } else {
+
+                return res.status(200).json({ message: 'Valid Token' })
+
+            }
+        })
+    } catch (err) {
+        console.log(err.message, 'get /isvalid')
+        return res.status(404).json({ message: 'Some Error Occured' })
+
+    }
+})
+
 app.get('/', async (req, res) => {
     try {
 
         const { userinfo } = req.headers
-        const user = await User.findOne({ email: userinfo })
-        if (!user) {
-            return res.status(404).json({ message: 'No Such User' })
-        }
 
-        const response = await Formdata.find({
-            uid: user._id
+        jwt.verify(userinfo, process.env.secret_password, async function (err, decoded) {
+            if (err) {
+                return res.status(404).json({ message: 'Invalid Token' })
+            } else {
+
+                const user = await User.findById(decoded.uid)
+                if (!user) {
+                    return res.status(404).json({ message: 'No Such User' })
+                }
+
+                const response = await Formdata.find({
+                    uid: user._id
+                })
+
+
+                return res.json(response)
+            }
         })
-
-
-        return res.json(response)
     } catch (err) {
         console.log(err.message, 'get /')
         return res.status(404).json({ message: 'Some Error Occured' })
@@ -57,7 +88,10 @@ app.post('/login', async (req, res) => {
         if (user.password !== password) {
             return res.status(500).json({ message: 'Invalid Credentials' })
         }
-        return res.status(200).json({ message: 'Successfully Login' })
+        const secret_password = process.env.secret_password
+        const token = jwt.sign({ uid: user._id }, secret_password,{expiresIn:'5m'})
+
+        return res.status(200).json({ message: 'Successfully Login', token })
     } catch (err) {
         console.log(err.message, 'Post Login')
         return res.json({ message: 'Some Error Occured' })
@@ -87,59 +121,68 @@ app.post('/signup', async (req, res) => {
 
 app.delete('/', async (req, res) => {
     const { formid } = req.headers
-    try{
-        await Formdata.deleteOne({_id:new mongoose.Types.ObjectId(formid)})
+    try {
+        await Formdata.deleteOne({ _id: new mongoose.Types.ObjectId(formid) })
         return res.status(200).json({ message: 'Deleted Successfully' })
-    }catch(err){
+    } catch (err) {
         console.log(err.message)
         return res.status(500).json({ message: 'Some Error Occured' })
     }
 })
 
 app.put('/', async (req, res) => {
-    const { userinfo } = req.headers
-    const user = await User.findOne({ email: userinfo })
-    if (!user) {
-        return res.status(404).json({ message: 'No Such User' })
-    }
+    const { usertoken } = req.headers
+
+    jwt.verify(usertoken, process.env.secret_password, async function (err, decoded) {
+        if (err) {
+            return res.status(404).json({ message: 'Invalid Token' })
+        } else {
 
 
-    const { Fullname,
-        Email,
-        Password,
-        PhoneNo,
-        Gender,
-        Language,
-        Profession,
-        city,
-        country,
-        pincode } = req.body.formObj
-
-    const { uid } = req.body
-
-    try {
-        const formData = await Formdata.updateOne({ _id: new mongoose.Types.ObjectId(uid) }, {
-            Fullname,
-            Email,
-            Password,
-            PhoneNo,
-            Gender,
-            Language,
-            Profession,
-            city,
-            country,
-            pincode
-        })
+            const user = await User.findById(decoded.uid)
+            if (!user) {
+                return res.status(404).json({ message: 'No Such User' })
+            }
 
 
-        const updatedData = await Formdata.findOne({ _id: new mongoose.Types.ObjectId(uid) })
-        res.status(201).json({ message: 'Data Updated Successfully', updatedData })
+            const { Fullname,
+                Email,
+                Password,
+                PhoneNo,
+                Gender,
+                Language,
+                Profession,
+                city,
+                country,
+                pincode } = req.body.formObj
+
+            const { uid } = req.body
+
+            try {
+                const formData = await Formdata.updateOne({ _id: new mongoose.Types.ObjectId(uid) }, {
+                    Fullname,
+                    Email,
+                    Password,
+                    PhoneNo,
+                    Gender,
+                    Language,
+                    Profession,
+                    city,
+                    country,
+                    pincode
+                })
+
+                const updatedData = await Formdata.findOne({ _id: new mongoose.Types.ObjectId(uid) })
+                return res.status(201).json({ message: 'Data Updated Successfully', updatedData })
+            }
 
 
-    } catch (err) {
-        console.log(err.message, 'put /')
-        res.status(500).json({ message: 'Some Error Occured' })
-    }
+            catch (err) {
+                console.log(err.message, 'put /')
+                return res.status(500).json({ message: 'Some Error Occured' })
+            }
+        }
+    })
 })
 
 
@@ -147,40 +190,49 @@ app.put('/', async (req, res) => {
 
 
 app.post('/', async (req, res) => {
-    const { userinfo } = req.headers
-    const user = await User.findOne({ email: userinfo })
-    if (!user) {
-        return res.status(404).json({ message: 'No Such User' })
-    }
-
-    const { Fullname,
-        Email,
-        Password,
-        PhoneNo,
-        Gender,
-        Language,
-        Profession,
-        city,
-        country,
-        pincode } = req.body
-
-    const form = new Formdata({
-        Fullname,
-        Email,
-        Password,
-        PhoneNo: parseInt(PhoneNo),
-        Gender,
-        Language,
-        Profession,
-        city,
-        country,
-        pincode: parseInt(pincode),
-        uid: user._id
-    })
-
     try {
-        const formData = await form.save()
-        res.status(201).json({ message: 'Data Saved Successfully', formData })
+        const { usertoken } = req.headers
+
+        jwt.verify(usertoken, process.env.secret_password, async function (err, decoded) {
+            if (err) {
+                return res.status(404).json({ message: 'Invalid Token' })
+            } else {
+
+                const user = await User.findById(decoded.uid)
+                if (!user) {
+                    return res.status(404).json({ message: 'No Such User' })
+                }
+
+                const { Fullname,
+                    Email,
+                    Password,
+                    PhoneNo,
+                    Gender,
+                    Language,
+                    Profession,
+                    city,
+                    country,
+                    pincode } = req.body
+
+                const form = new Formdata({
+                    Fullname,
+                    Email,
+                    Password,
+                    PhoneNo: parseInt(PhoneNo),
+                    Gender,
+                    Language,
+                    Profession,
+                    city,
+                    country,
+                    pincode: parseInt(pincode),
+                    uid: user._id
+                })
+
+                // try {
+                const formData = await form.save()
+                res.status(201).json({ message: 'Data Saved Successfully', formData })
+            }
+        })
     } catch (err) {
         console.log(err.message, 'post /')
         res.status(500).json({ message: 'Some Error Occured' })
