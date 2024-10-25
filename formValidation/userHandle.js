@@ -1,5 +1,43 @@
 const regUser = document.querySelector('.regUser')
 const userData = document.querySelector('.userData')
+const downloadData = document.querySelector('#downloadData')
+
+downloadData.addEventListener('click', async (event) => {
+    event.preventDefault()
+// window.addEventListener('DOMContentLoaded', async () => {
+
+    try {
+        const token = localStorage.getItem('userToken')
+        const response = await fetch('http://www.localhost:3000/download', {
+            headers: {
+                userInfo: token
+            }
+        })
+        if (!response.ok) {
+            throw new Error(`HTTP error! status:`);
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob); 
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'datam.csv'; 
+        document.body.appendChild(a);
+        a.click(); 
+        a.remove(); 
+        window.URL.revokeObjectURL(url); 
+
+
+
+
+    } catch (err) {
+        if (err.message === 'Invalid Token') {
+            window.location.href = "http://127.0.0.1:5500/formValidation/login.html"
+        }
+        regUser.innerHTML = 'Empty User Data'
+        console.log('some error occured', err.message)
+    }
+})
 
 
 window.addEventListener('DOMContentLoaded', getData)

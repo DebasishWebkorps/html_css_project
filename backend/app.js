@@ -3,10 +3,13 @@ const cors = require('cors')
 const dotenv = require('dotenv')
 const mongoose = require('mongoose')
 
+const fs = require('fs')
+
 const Formdata = require('./formSchema')
 const User = require('./userSchema')
 
 const jwt = require('jsonwebtoken')
+const path = require('path')
 
 
 const app = express()
@@ -67,6 +70,73 @@ app.get('/', async (req, res) => {
     }
 })
 
+
+app.get('/download', async (req, res) => {
+    try {
+
+
+        const { userinfo } = req.headers
+        jwt.verify(userinfo, process.env.secret_password, async function (err, decoded) {
+            if (err) {
+                return res.status(404).json({ message: 'Invalid Token' })
+            } else {
+
+                const user = await User.findById(decoded.uid)
+                if (!user) {
+                    return res.status(404).json({ message: 'No Such User' })
+                }
+
+                const response = await Formdata.find({
+                    uid: user._id
+                })
+
+                if (response.length < 1) return res.json({ message: 'No data' })
+
+
+                const content = []
+
+                const heading = Object.keys(response[0].toObject()) 
+                const requiredHeading = heading.slice(1, heading.length - 2)
+                content.push(requiredHeading.join(','))
+
+                response.forEach(data => {
+                    const row = data.toObject()
+                    const values = Object.values(row)
+                    const requiredValue = values.slice(1, values.length - 2)
+                    const allValue = requiredValue.join(',')
+                    content.push(allValue)
+                })
+
+                const finalModifiedContent = content.join('\n')
+               
+
+                fs.writeFile('data.csv', finalModifiedContent, (err, data) => {
+                    if (err) throw err
+
+                    const filePath = path.join(__dirname, 'data.csv')
+                    // console.log(filePath)
+
+
+                    return res.download(filePath, 'data.csv', (err) => {
+                        if (err) {
+                            console.error(err);
+                        }
+                        fs.unlink(filePath, (err) => {
+                            if (err) console.error('Failed to delete file:', err);
+                        });
+                    });
+                })
+
+
+            }
+        })
+    } catch (err) {
+        console.log(err.message, 'get /')
+        return res.status(404).json({ message: 'Some Error Occured' })
+
+    }
+})
+
 // app.get('/user', async (req, res) => {
 
 
@@ -89,7 +159,7 @@ app.post('/login', async (req, res) => {
             return res.status(500).json({ message: 'Invalid Credentials' })
         }
         const secret_password = process.env.secret_password
-        const token = jwt.sign({ uid: user._id }, secret_password,{expiresIn:'5m'})
+        const token = jwt.sign({ uid: user._id }, secret_password, { expiresIn: '5m' })
 
         return res.status(200).json({ message: 'Successfully Login', token })
     } catch (err) {
