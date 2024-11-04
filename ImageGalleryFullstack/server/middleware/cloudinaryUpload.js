@@ -40,9 +40,6 @@ const cloudinaryUpload = async (req, res) => {
         })
 
 
-        user.updateOne({})
-
-
 
         return res.status(201).json({ message: 'Image Upload Successfully', img });
 

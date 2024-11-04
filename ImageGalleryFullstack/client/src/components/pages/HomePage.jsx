@@ -7,12 +7,14 @@ import { useDispatch, useSelector } from "react-redux"
 import { FullPageImageContainer } from "../FullPageImageContainer"
 import { setUserData } from "../../store/dataSlice"
 import { Loader } from "../Loader"
+import { StatisticComponent } from "../StatisticsComponent"
 
 export const HomePage = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
+    const dataType = useSelector(state => state.functionality.typeOfData)
 
     const isFullImage = useSelector(state => state.functionality.showFullImage)
 
@@ -67,7 +69,11 @@ export const HomePage = () => {
             {/* right sidebar */}
             {showPage &&
                 <div className="flex-1 m-2 overflow-y-auto">
-                    <RightSidebar page={page} />
+                    {
+                        dataType === 'statistics' ?
+                            <StatisticComponent /> :
+                            <RightSidebar page={page} />
+                    }
                 </div>
             }
 

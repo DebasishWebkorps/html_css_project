@@ -72,3 +72,49 @@ exports.getTokenVerify = async (req, res) => {
 }
 
 
+
+exports.getUserStatistics = async (req, res) => {
+    const id = req.userId
+    try {
+        const { role } = await User.findById(id, { role: 1 })
+
+        if (role !== 'admin') {
+            return res.status(403).json({ message: 'You are not authorized to access' })
+        }
+
+
+        const usersData = await User.aggregate([
+            {
+                $lookup: {
+                    from: 'images',
+                    localField: '_id',
+                    foreignField: 'uid',
+                    as: 'images'
+                }
+            },
+            {
+                $project: {
+                    email: 1,
+                    totalPosts: { $size: '$images' },
+                    totalLikes: {
+                        $sum: {
+                            $map: {
+                                input: '$images',
+                                as: 'image',
+                                in: { $size: '$$image.liked' } 
+                            }
+                        }
+                    }
+                }
+            }
+        ]);
+
+
+        return res.status(200).json(usersData)
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Some Error Occured' });
+    }
+}
+

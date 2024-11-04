@@ -23,7 +23,7 @@ exports.getAllImages = async (req, res, next) => {
         return res.status(200).json(result)
     } catch (error) {
         console.log(error.message)
-        return res.status(500).json({message: 'some error occured'})
+        return res.status(500).json({ message: 'some error occured' })
     }
 }
 
@@ -51,7 +51,7 @@ exports.getMyImages = async (req, res) => {
         return res.status(200).json(result)
     } catch (error) {
         console.log(error.message)
-        return res.status(500).json({message: 'some error occured'})
+        return res.status(500).json({ message: 'some error occured' })
     }
 }
 
@@ -75,13 +75,14 @@ exports.getLikedImages = async (req, res) => {
 
 
 
-        const result = likedImage?.map(image => ({
-            _id: image._id,
-            url: image.url,
-            uid: image.uid,
-            likedCount: image.liked.length,
-            isLiked: image.liked.includes(req.userId),
-        }));
+        const result = likedImage?.filter(img => img !== null)
+            .map(image => ({
+                _id: image._id,
+                url: image.url,
+                uid: image.uid,
+                likedCount: image.liked.length,
+                isLiked: image.liked.includes(req.userId),
+            }));
 
         return res.status(200).json(result)
     } catch (error) {

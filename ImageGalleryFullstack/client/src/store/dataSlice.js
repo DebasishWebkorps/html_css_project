@@ -42,11 +42,18 @@ export const dataSlice = createSlice({
         },
         addImage: (state, action) => {
             state.currentData.push(action.payload)
+        },
+        resetData: (state) => {
+            return {
+                currentData: [],
+                userData: {}
+
+            }
         }
     }
 
 })
 
-export const { setData, setUserData, setLike, removeImage, addImage } = dataSlice.actions
+export const { setData, setUserData, setLike, removeImage, addImage, resetData } = dataSlice.actions
 
 export default dataSlice.reducer;

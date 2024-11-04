@@ -7,6 +7,7 @@ const verifyToken = require('../middleware/verifyToken')
 router.post('/signup', userController.postSignup)
 router.post('/login', userController.postLogin)
 router.get('/isValidToken', verifyToken, userController.getTokenVerify)
+router.get('/statistics', verifyToken, userController.getUserStatistics)
 
 
 

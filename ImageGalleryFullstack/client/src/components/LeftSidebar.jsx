@@ -2,8 +2,8 @@ import axios from "axios"
 import { useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { addImage } from "../store/dataSlice"
-import { hideLoading, setTypeOfData, showLoading } from "../store/functionalitySlice"
+import { addImage, resetData } from "../store/dataSlice"
+import { hideLoading, resetFunctionality, setTypeOfData, showLoading } from "../store/functionalitySlice"
 
 export const LeftSidebar = (props) => {
 
@@ -27,6 +27,7 @@ export const LeftSidebar = (props) => {
 
         if (!imageRef.current.files.length) {
             alert('select image first')
+            dispatch(hideLoading())
             return
         }
 
@@ -61,6 +62,8 @@ export const LeftSidebar = (props) => {
 
     const logoutHandler = () => {
         localStorage.removeItem('userToken')
+        dispatch(resetFunctionality())
+        dispatch(resetData())
         navigate('/login')
     }
 
@@ -93,6 +96,9 @@ export const LeftSidebar = (props) => {
                     <button className={`text-white cursor-pointer py-2 ${dataType === 'all' ? ' bg-black min-w-full border-r-4 border-red-500' : ''}`} onClick={() => rightSideHandler('all')}>All Image</button>
                     <button className={`text-white cursor-pointer py-2 ${dataType === 'myImage' ? ' bg-black min-w-full border-r-4 border-red-500' : ''}`} onClick={() => rightSideHandler('myImage')}>My Image</button>
                     <button className={`text-white cursor-pointer py-2 ${dataType === 'likedImage' ? ' bg-black min-w-full border-r-4 border-red-500' : ''}`} onClick={() => rightSideHandler('likedImage')}>Liked Image</button>
+                    {userData.role === 'admin' &&
+                        <button className={`text-white cursor-pointer py-2 ${dataType === 'statistics' ? ' bg-black min-w-full border-r-4 border-red-500' : ''}`} onClick={() => rightSideHandler('statistics')}>Statistics</button>
+                    }
                 </div>
                 <button
                     onClick={logoutHandler}

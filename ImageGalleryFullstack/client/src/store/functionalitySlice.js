@@ -36,11 +36,19 @@ export const functionalitySlice = createSlice({
         },
         hideLoading: (state) => {
             state.isLoading = false
+        },
+        resetFunctionality: (state) => {
+            return {
+                showFullImage: false,
+                fullImageData: {},
+                typeOfData: 'all',
+                isLoading: false
+            }
         }
 
     }
 
 })
 
-export const { toggleFullImagewithData, toggleFullImage, updateImageData, setTypeOfData, showLoading, hideLoading } = functionalitySlice.actions;
+export const { toggleFullImagewithData, toggleFullImage, updateImageData, setTypeOfData, showLoading, hideLoading, resetFunctionality } = functionalitySlice.actions;
 export default functionalitySlice.reducer;
