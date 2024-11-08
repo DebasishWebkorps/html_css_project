@@ -5,16 +5,19 @@ const cors = require('cors')
 
 
 const userRoute = require('./routes/userRoute')
+const orderRoute = require('./routes/orderRoute')
+
+dotenv.config()
 
 const app = express()
 app.use(cors())
 
 app.use(express.json())
 
-dotenv.config()
 
 
 app.use('/auth', userRoute)
+app.use('/product', orderRoute)
 
 
 

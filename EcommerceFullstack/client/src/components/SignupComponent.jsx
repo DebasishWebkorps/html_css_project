@@ -1,5 +1,6 @@
 import axios from "axios"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
@@ -8,6 +9,12 @@ export const SignupComponent = () => {
     const navigate = useNavigate()
     const emailRef = useRef('')
     const passwordRef = useRef('')
+
+    const email = useSelector(state => state.user.email)
+
+    useEffect(() => {
+        if (email) return navigate('/')
+    })
 
     const timeoutId = useRef()
 

@@ -1,13 +1,19 @@
 import axios from "axios"
-import { useRef, useState } from "react"
-import { useDispatch } from "react-redux"
+import { useEffect, useRef, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { setUser } from "../store/userSlice"
 
 export const LoginComponent = () => {
 
+    const email = useSelector(state => state.user.email)
     const navigate = useNavigate()
+
+    useEffect(() => {
+        if (email) return navigate('/')
+    })
+
     const emailRef = useRef('')
     const passwordRef = useRef('')
 
@@ -132,7 +138,7 @@ export const LoginComponent = () => {
     return (
         <div className="w-1/2 h-[70vh] bg-white my-3 mx-auto grid grid-cols-3 shadow-md">
 
-            <div className="relative bg-[#2874F0]">
+            <div className="relative bg-[#2874F0] overflow-hidden">
                 <div className="p-8">
                     <h1 className="text-3xl text-white font-semibold">Login</h1>
                     <p className="text-[14px] font-sans text-gray-300 mt-3">Get access Your Orders Wishlist and Recommendations</p>

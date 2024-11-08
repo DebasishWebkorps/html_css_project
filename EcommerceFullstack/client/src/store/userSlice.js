@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     email: '',
+    cart: []
 }
 
 const userSlice = createSlice({
@@ -11,7 +12,7 @@ const userSlice = createSlice({
         setUser: (state, action) => {
             state.email = action.payload
         },
-        resetUser:(state)=>{
+        resetUser: (state) => {
             return {
                 email: ''
             }

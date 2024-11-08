@@ -62,12 +62,11 @@ exports.postSignup = async (req, res) => {
 
 exports.postVerifyToken = async (req, res) => {
     try {
-        const { usertoken } = req.headers
-        const isValidToken = jwt.verify(usertoken, process.env.secret_password)
-        if (!isValidToken) throw new Error
-        const user = await User.findById(isValidToken.id)
-        if (!user) throw new Error
-        return res.status(200).json({ message: 'Valid Token ', email: user.email })
+        if (req.user) {
+            return res.status(200).json({ message: 'Valid Token ', email: req.user.email })
+        } else {
+            throw new Error
+        }
     } catch (error) {
         return res.status(404).json({ message: 'Not Authorized' })
     }
