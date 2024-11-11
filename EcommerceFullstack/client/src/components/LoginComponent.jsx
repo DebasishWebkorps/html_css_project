@@ -115,18 +115,18 @@ export const LoginComponent = () => {
         }
 
 
-        if (error.emailError === '', error.passwordError === '') {
+        if (error.emailError === '' && error.passwordError === '') {
 
             try {
                 const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}auth/login`, user)
                 localStorage.setItem('userToken', response.data.token)
-                dispatch(setUser(response.data.email))
-                toast.success(response.data.message)
+                toast.success(response.data?.message)
+                dispatch(setUser(response.data.user))
                 navigate('/')
 
-            } catch (error) {
+            } catch (err) {
                 // alert(error.response.data.message)
-                toast.error(error.response.data.message)
+                toast.error(err.response?.data?.message)
             }
         }
 
@@ -136,10 +136,10 @@ export const LoginComponent = () => {
 
 
     return (
-        <div className="w-1/2 h-[70vh] bg-white my-3 mx-auto grid grid-cols-3 shadow-md">
+        <div className="w-full sm:w-1/2 h-[70vh] bg-white my-3 mx-auto grid grid-cols-3 shadow-md">
 
             <div className="relative bg-[#2874F0] overflow-hidden">
-                <div className="p-8">
+                <div className="p-2 sm:p-8">
                     <h1 className="text-3xl text-white font-semibold">Login</h1>
                     <p className="text-[14px] font-sans text-gray-300 mt-3">Get access Your Orders Wishlist and Recommendations</p>
                 </div>

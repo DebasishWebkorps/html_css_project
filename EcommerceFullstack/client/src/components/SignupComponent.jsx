@@ -135,10 +135,10 @@ export const SignupComponent = () => {
 
 
     return (
-        <div className="w-1/2 h-[70vh] bg-white my-3 mx-auto grid grid-cols-3 shadow-md">
+        <div className="w-full sm:w-1/2 h-[70vh] bg-white my-3 mx-auto grid grid-cols-3 shadow-md">
 
             <div className="relative bg-[#2874F0]">
-                <div className="p-8">
+                <div className="p-2 sm:p-8">
                     <h1 className="text-3xl text-white font-semibold">Looks like you're new here</h1>
                     <p className="text-[14px] font-sans text-gray-300 mt-3">Signup with your email address to get started</p>
                 </div>

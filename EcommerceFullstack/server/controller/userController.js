@@ -23,7 +23,7 @@ exports.postLogin = async (req, res) => {
 
         const token = await jwt.sign({ id: existingUser._id }, process.env.secret_password)
 
-        return res.status(201).json({ message: 'Login Successfully', token, email: existingUser.email })
+        return res.status(200).json({ message: 'Login Successfully', token, user: existingUser })
 
     } catch (error) {
         console.log(error.message)
@@ -63,7 +63,7 @@ exports.postSignup = async (req, res) => {
 exports.postVerifyToken = async (req, res) => {
     try {
         if (req.user) {
-            return res.status(200).json({ message: 'Valid Token ', email: req.user.email })
+            return res.status(200).json({ message: 'Valid Token ', email: req.user.email, cart: req.user.cart })
         } else {
             throw new Error
         }

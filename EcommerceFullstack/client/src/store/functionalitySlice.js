@@ -5,7 +5,8 @@ const initialState = {
     isNotification: {
         type: 'notification',
         message: 'Notification'
-    }
+    },
+    isMobileMenu: false
 }
 
 const functionalitySlice = createSlice({
@@ -17,9 +18,15 @@ const functionalitySlice = createSlice({
                 type: payload.data.type,
                 message: payload.data.message
             }
+        },
+        showMobileMenu: (state) => {
+            state.isMobileMenu = true
+        },
+        hideMobileMenu: (state) => {
+            state.isMobileMenu = false
         }
     }
 })
 
-export const { setNotification } = functionalitySlice.actions;
+export const { setNotification, showMobileMenu, hideMobileMenu } = functionalitySlice.actions;
 export default functionalitySlice.reducer;

@@ -18,6 +18,7 @@ import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { setUser } from './store/userSlice'
 import { ProtectComponent } from './components/ProtectComponent'
+import { SearchComponent } from './components/searchComponent'
 
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
     try {
       const userToken = localStorage.getItem('userToken')
 
-      if (!userToken) throw new Error('Token Missing')
+      if (!userToken) throw new Error
 
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}auth/verifytoken`,
@@ -42,13 +43,11 @@ function App() {
           },
         }
       );
-      dispatch(setUser(response.data.email))
+
+      dispatch(setUser(response.data))
 
     } catch (error) {
 
-      if (error.message !== 'Token Missing') {
-        toast.error(error.message)
-      }
       navigate('/login')
     }
   }
@@ -62,12 +61,10 @@ function App() {
     <>
       <Navbar />
 
-      {/* {location.pathname === '/' && <MenuBar />}
-      {location.pathname === '/cart' && <MenuBar />}
-      {location.pathname === '/orders' && <MenuBar />} */}
 
       {
         (location.pathname !== '/login' &&
+          // location.pathname.startsWith !== '/search' &&
           location.pathname !== '/signup') && <MenuBar />
       }
 
@@ -92,6 +89,7 @@ function App() {
         <Route path='/products' element={<ProductComponent />} />
         <Route path='/:category' element={<ProductComponent />} />
         <Route path='/products/:productId' element={<SingleProductComponent />} />
+        <Route path='/search/:query' element={<SearchComponent />} />
         <Route path='/' element={<><HeroBar /><HomeProduct /></>} />
       </Routes>
 

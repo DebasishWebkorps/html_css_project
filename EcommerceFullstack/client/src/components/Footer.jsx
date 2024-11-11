@@ -2,7 +2,7 @@ export const Footer = () => {
    
     return (
         <div className="w-full bg-[#172337]">
-            <div className="grid grid-cols-4 p-10 font-serif">
+            <div className="grid grid-cols-2 sm:grid-cols-4 p-10 font-serif">
                 <div>
                     <h2 className="capitalize text-[#878787] my-3">About</h2>
                     <li className="text-white list-none">Contact Us</li>
@@ -40,9 +40,9 @@ export const Footer = () => {
                 </div>
 
             </div>
-            <div className=" flex justify-between border-t border-t-gray-500 py-3 px-4 ">
+            <div className=" flex sm:flex-row flex-col gap-2 justify-between items-centern border-t border-t-gray-500 py-3 sm:px-4 px-2 ">
 
-                <div className="flex gap-4 text-white text-xs">
+                <div className="flex sm:flex-row flex-col items-start gap-4 text-white text-xs">
 
                     <div className="flex items-center gap-1">
                         <div className="w-4 h-4 overflow-hidden">
@@ -74,10 +74,13 @@ export const Footer = () => {
 
 
                 </div>
-                <div className="self-end">
+                <div className="self-start sm:self-end">
                     <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/payment-method-c454fb.svg" alt="" />
                 </div>
             </div>
+
+
+            <h2 className="text-center text-white text-xs">Developed By - Debasish Kisan</h2>
 
 
 

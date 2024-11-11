@@ -11,7 +11,7 @@ export const HomeProduct = () => {
 
     const getProds = async () => {
         try {
-            const jewellery = await axios.get('https://fakestoreapi.com/products/category/jewelery')
+            const jewellery = await axios.get('https://fakestoreapi.com/products/category/jewelery?limit=4')
             const electronics = await axios.get('https://fakestoreapi.com/products/category/electronics?limit=4')
             setJewellery(jewellery.data)
             setElectronics(electronics.data)
@@ -37,7 +37,7 @@ export const HomeProduct = () => {
                             onClick={() => navigate(`/${jewellery[0]?.category}`)}
                             className="w-max px-8 bg-blue-600 text-white active:scale-95">See All</button>
                     </div>
-                    <div className="p-3 grid grid-cols-4 gap-2">
+                    <div className="p-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
                         {
                             jewellery?.map(prod => {
                                 return (
@@ -59,12 +59,12 @@ export const HomeProduct = () => {
                 electronics[0] &&
                 <div className="flex flex-col bg-white">
                     <div className="flex w-full justify-between items-center py-2 px-6 border-b">
-                        <h2 className="capitalize">{electronics[0]?.category}</h2>
+                        <h2 className="capitalize text-xs sm:text-lg">{electronics[0]?.category}</h2>
                         <button
                             onClick={() => navigate(`/${electronics[0]?.category}`)}
-                            className="w-max px-8 bg-blue-600 text-white active:scale-95">See All</button>
+                            className="w-max p-2 sm:px-8 text-xs sm:text-lg bg-blue-600 text-white active:scale-95">See All</button>
                     </div>
-                    <div className="p-3 grid grid-cols-4 gap-2">
+                    <div className="p-3 grid grid-cols-2 sm:grid-cols-4 gap-2">
                         {
                             electronics?.map(prod => {
                                 return (

@@ -1,13 +1,16 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
+import { updateCart } from "../store/userSlice"
 
 export const SingleProductComponent = () => {
     const [product, setProduct] = useState(null)
 
     const { productId } = useParams()
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const getProduct = async () => {
         try {
@@ -26,7 +29,8 @@ export const SingleProductComponent = () => {
             if (!userToken) throw new Error
 
             const response = await axios.post(`http://localhost:3000/product/addtocart`, {
-                productId: productId
+                productId: productId,
+                type: 'increase'
             },
                 {
                     headers: {
@@ -35,6 +39,8 @@ export const SingleProductComponent = () => {
                 }
             )
             toast.success(response.data.message)
+            dispatch(updateCart({ type: 'increase', productId }))
+
         } catch (error) {
             toast.error(error.message)
         }
@@ -57,10 +63,10 @@ export const SingleProductComponent = () => {
 
 
     return (
-        <div className="w-4/5 mx-auto p-2 grid grid-cols-3 gap-3 bg-white my-2">
-            <div className="w-full h-max overflow-hidden sticky top-0 p-2">
+        <div className="w-full sm:w-4/5 mx-auto p-2 grid grid-cols-3 gap-3 bg-white my-2">
+            <div className="w-full h-max overflow-hidden sticky top-10 p-2">
                 <img className="object-cover p-3 hover:scale-110 overflow-hidden" src={product?.image} alt="" />
-                <div className="grid grid-cols-2 gap-2 mt-2">
+                <div className="grid sm:grid-cols-2 gap-2 mt-2">
                     <button
                         onClick={addToCartHandler}
                         className="bg-yellow-400 rounded-md py-2 cursor-pointer active:scale-95">Add to cart</button>
@@ -73,7 +79,7 @@ export const SingleProductComponent = () => {
                 <h4 className="font-sans font-semibold">{product?.title}</h4>
                 <p>Rating - <span className="font-semibold">{product?.rating.rate}</span></p>
                 <p className="text-xs font-semibold">Rs. <span className="text-sm">{product?.price}</span>/-</p>
-                <p className="font-mono text-sm">{product?.description}</p>
+                <p className="font-mono text-sm text-justify">{product?.description}</p>
                 <p>Stock - {product?.rating.count}</p>
             </div>
         </div>

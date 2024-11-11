@@ -6,7 +6,7 @@ const verifyToken = async (req, res, next) => {
         const { usertoken } = req.headers
         const isValidToken = jwt.verify(usertoken, process.env.secret_password)
         if (!isValidToken) throw new Error
-        const user = await User.findById(isValidToken.id)
+        const user = await User.findById(isValidToken.id,{password:0})
         if (!user) throw new Error
         req.user = user
         next()
