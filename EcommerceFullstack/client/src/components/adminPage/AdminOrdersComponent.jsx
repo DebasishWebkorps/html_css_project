@@ -1,46 +1,58 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import axios from "axios"
+import { useEffect, useState } from "react"
+import { toast } from "react-toastify"
 
-export const OrderComponent = () => {
+export const AdminOrdersComponent = () => {
 
     const [orders, setOrders] = useState([])
-
 
     const getOrders = async () => {
         try {
             const userToken = localStorage.getItem('userToken')
-
-            if (!userToken) throw new Error
-
-            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/order`, {
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}admin/orders`, {
                 headers: {
                     userToken: userToken
-                },
-            });
+                }
+            })
 
             setOrders(response.data)
-
         } catch (error) {
-            toast.error(error.message)
+            console.log('some error occured')
         }
+
     }
 
-
+    const statusChangeHandler = async (event, orderId) => {
+        try {
+            const status = event.target.value
+            console.log(status, orderId)
+            const userToken = localStorage.getItem('userToken')
+            const response = await axios.put(`${import.meta.env.VITE_SERVER_URL}admin/status`, {}, {
+                headers: {
+                    userToken: userToken,
+                    orderId: orderId.toString(),
+                    status
+                }
+            })
+            toast.success('status updated')
+            getOrders()
+        } catch (error) {
+            toast.error('some error occured', error.message)
+        }
+    }
 
     useEffect(() => {
         getOrders()
     }, [])
 
     if (orders.length === 0) {
-        return (
-            <div className="text-center py-5">No orders...</div>
-        )
+        return <h2 className=" bg-white text-center py-5">You haven't get any Orders yet...</h2>
     }
 
 
     return (
-        <div className="w-full sm:w-4/5 mx-auto p-3 bg-white flex flex-col gap-5 my-3">
+
+        <div className="w-full mx-auto p-3 bg-white flex flex-col gap-5 my-3">
 
             {
                 orders?.map(order => {
@@ -52,13 +64,13 @@ export const OrderComponent = () => {
                                     {order._id}
                                 </p>
 
-                                <p className={`${order.status === 'pending' ? 'bg-orange-400 text-white' : ''}
-                                ${order.status === 'processed' ? 'bg-indigo-500 text-white' : ''}
-                                ${order.status === 'shipped' ? 'bg-yellow-400 text-black' : ''}
-                                ${order.status === 'completed' ? 'bg-green-600 text-white' : ''}
-                                  text-xs sm:p-2 py-2 rounded-sm`}>
-                                    {order.status}
-                                </p>
+                                <select onChange={(event) => statusChangeHandler(event, order._id)} className="py-2 px-2 cursor-pointer focus:outline-none focus:ring-2 rounded-md" name="" id=""
+                                    value={order.status}>
+                                    <option value="pending">Pending</option>
+                                    <option value="processed">Processed</option>
+                                    <option value="shipped">Shipped</option>
+                                    <option value="completed">Completed</option>
+                                </select>
                             </div>
 
                             {
@@ -98,6 +110,5 @@ export const OrderComponent = () => {
 
 
         </div>
-
     )
 }

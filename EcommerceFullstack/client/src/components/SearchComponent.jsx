@@ -10,9 +10,8 @@ export const SearchComponent = () => {
     const [filteredData, setFilteredData] = useState([])
 
     const getProducts = async () => {
-        const response = await axios.get(`https://fakestoreapi.com/products/`)
-        const filteredData = response.data.filter(data => data.title.toLowerCase().includes(params.query?.toLowerCase()))
-        setFilteredData(filteredData)
+        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/search/${params.query}`)
+        setFilteredData(response.data)
     }
 
     useEffect(() => {
@@ -33,18 +32,19 @@ export const SearchComponent = () => {
                 {filteredData?.map(product => {
                     return (
 
-                        <div key={product.id}
+                        <div key={product._id}
                             onClick={() => {
-                                navigate(`/products/${product.id}`)
+                                navigate(`/products/${product._id}`)
                             }}
-                            className="shadow-md overflow-hidden bg-white rounded-md relative border flex flex-col justify-between">
+                            className="shadow-md overflow-hidden bg-white rounded-md relative cursor-pointer border flex flex-col justify-between">
                             {/* <p className="absolute top-0 right-0 bg-blue-600 text-white p-1 rounded-full z-10">{product.rating.rate}</p> */}
                             <div className="w-full h-3/4 overflow-hidden p-2">
-                                <img className="object-contain w-full h-full hover:scale-110 cursor-pointer" src={product.image} alt="" />
+                                <img className="object-contain w-full h-full hover:scale-110 cursor-pointer" src={product.images[0]} alt="" />
                             </div>
 
                             <div>
-                                <p className="px-2 font-mono whitespace-nowrap">{product.title.split(' ').slice(0, 3).join(' ')}</p>
+                                <p className="px-2 font-mono whitespace-nowrap">{product.name}</p>
+                                {/* <p className="px-2 font-mono whitespace-nowrap">{product.title.split(' ').slice(0, 3).join(' ')}</p> */}
                                 {/* <p className="px-2 font-mono whitespace-nowrap">{product.title}</p> */}
                                 <p className="text-right px-2 pb-2 text-yellow-600">Rs.{product.price}/-</p>
                             </div>

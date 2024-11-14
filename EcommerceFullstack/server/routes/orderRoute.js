@@ -8,5 +8,10 @@ router.post('/removecart', verifyToken, orderController.postRemoveFromCart)
 router.get('/cart', verifyToken, orderController.getCart)
 router.post('/order', verifyToken, orderController.postOrders)
 router.get('/order', verifyToken, orderController.getOrders)
+router.get('/search/:query',orderController.getSearchProduct)
+
+router.get('/category/:category', orderController.getProductCategorywise)
+router.get('/:productId', orderController.getProduct)
+router.get('/', verifyToken, orderController.getAllProduct)
 
 module.exports = router

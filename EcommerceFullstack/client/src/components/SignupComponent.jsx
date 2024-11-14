@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import { useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 
 export const SignupComponent = () => {
@@ -10,11 +10,18 @@ export const SignupComponent = () => {
     const emailRef = useRef('')
     const passwordRef = useRef('')
 
+    const isUser = useLocation().pathname === '/signup'
+    const isAdmin = useLocation().pathname === '/admin/signup'
+
     const email = useSelector(state => state.user.email)
+    const role = useSelector(state => state.user.role)
 
     useEffect(() => {
+        if (isAdmin) {
+            if (email && role === 'admin') return navigate('/admin')
+        }
         if (email) return navigate('/')
-    })
+    }, [])
 
     const timeoutId = useRef()
 
@@ -81,9 +88,12 @@ export const SignupComponent = () => {
     const signupHandler = async (event) => {
         event.preventDefault()
 
+
+
         const user = {
             email: emailRef.current.value,
-            password: passwordRef.current.value
+            password: passwordRef.current.value,
+            role: isUser ? 'user' : 'admin'
         }
 
 
@@ -119,12 +129,20 @@ export const SignupComponent = () => {
             try {
                 const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}auth/signup`, user)
                 toast.success(response.data.message)
-                navigate('/login')
+                if (isUser) {
+                    navigate('/login')
+                } else {
+                    navigate('/admin/login')
+                }
 
             } catch (error) {
                 toast.error(error.response.data.message)
                 if (error.response.data.message === 'User Already Existed') {
-                    navigate('/login')
+                    if (isUser) {
+                        navigate('/login')
+                    } else {
+                        navigate('/admin/login')
+                    }
                 }
             }
 
@@ -135,12 +153,12 @@ export const SignupComponent = () => {
 
 
     return (
-        <div className="w-full sm:w-1/2 h-[70vh] bg-white my-3 mx-auto grid grid-cols-3 shadow-md">
+        <div className="w-full sm:w-1/2 bg-white my-3 mx-auto grid grid-cols-3 shadow-md">
 
-            <div className="relative bg-[#2874F0]">
+            <div className="relative bg-[#2874F0] flex flex-col justify-between">
                 <div className="p-2 sm:p-8">
-                    <h1 className="text-3xl text-white font-semibold">Looks like you're new here</h1>
-                    <p className="text-[14px] font-sans text-gray-300 mt-3">Signup with your email address to get started</p>
+                    <h1 className="text-sm sm:text-xl text-white font-semibold">Looks like you're new here</h1>
+                    <p className="text-xs sm:text-sm font-sans text-gray-300 mt-3">Signup with your email address to get started</p>
                 </div>
                 <div className="w-full absolute bottom-10 left-0 flex justify-center">
                     <img className="object-cover" src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/login_img_c4a81e.png" alt="" />
@@ -148,7 +166,8 @@ export const SignupComponent = () => {
             </div>
 
             <div className="col-span-2 flex justify-center items-center">
-                <form action="#" className="flex flex-col gap-10 w-full px-10">
+                <form action="#" className="flex flex-col gap-8 w-full px-10 my-3 py-3">
+                    <label className="text-blue-800 font-bold uppercase text-center underline" htmlFor="">{isUser ? 'User' : 'Admin'} Signup</label>
                     <input
                         ref={emailRef}
                         onChange={emailChangeHandler}
@@ -166,14 +185,35 @@ export const SignupComponent = () => {
                     <button
                         onClick={(event) => signupHandler(event)}
                         className="flex bg-[#fb641b] justify-center py-3 rounded-sm shadow-md text-white font-bold active:scale-95 outline-none">Signup</button>
-                    <button
+
+                    {isUser && <button
                         onClick={(event) => {
                             event.preventDefault()
                             navigate('/login')
                         }}
-                        className="flex justify-center py-3 rounded-sm shadow-lg text-blue-500 font-semibold active:scale-95 outline-none">
+                        className="flex text-xs justify-center py-3 mb-2 rounded-sm shadow-lg text-blue-500 font-semibold active:scale-95 outline-none">
                         Already have an account? Try Login
-                    </button>
+                    </button>}
+
+
+                    {!isUser &&
+                        <button
+                            onClick={(event) => {
+                                event.preventDefault()
+                                navigate('/admin/login')
+                            }}
+                            className="flex text-xs justify-center py-3 mb-2 rounded-sm shadow-lg text-blue-500 font-semibold active:scale-95 outline-none">
+                            Admin Login
+                        </button>
+                    }
+
+                    {isUser === true ?
+                        <Link className="text-right text-sm mb-2 cursor-pointer text-blue-600 underline" to={'/admin/login'}>Admin Login</Link>
+                        :
+                        <Link className="text-right text-sm mb-2 cursor-pointer text-blue-600 underline" to={'/login'}>User Login</Link>
+                    }
+
+
                 </form>
             </div>
 

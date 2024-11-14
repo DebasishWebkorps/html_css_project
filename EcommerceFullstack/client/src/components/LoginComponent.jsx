@@ -1,18 +1,31 @@
 import axios from "axios"
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { setUser } from "../store/userSlice"
 
 export const LoginComponent = () => {
 
     const email = useSelector(state => state.user.email)
+    const role = useSelector(state => state.user.role)
     const navigate = useNavigate()
 
+    const isUser = useLocation().pathname === '/login'
+    const isUserLogin = useLocation().pathname === '/login'
+    const isAdminLogin = useLocation().pathname === '/admin/login'
+
     useEffect(() => {
-        if (email) return navigate('/')
-    })
+
+        if (isUserLogin) {
+            if (email) return navigate('/')
+        }
+
+        if (isAdminLogin) {
+            if (role === 'admin') return navigate('/admin')
+        }
+
+    }, [])
 
     const emailRef = useRef('')
     const passwordRef = useRef('')
@@ -88,6 +101,7 @@ export const LoginComponent = () => {
         const user = {
             email: emailRef.current.value,
             password: passwordRef.current.value,
+            role: isUser ? 'user' : 'admin'
         }
 
         if (user.email === '' && user.password === '' && user.role === '') {
@@ -122,7 +136,11 @@ export const LoginComponent = () => {
                 localStorage.setItem('userToken', response.data.token)
                 toast.success(response.data?.message)
                 dispatch(setUser(response.data.user))
-                navigate('/')
+                if (isUserLogin) {
+                    navigate('/')
+                } else {
+                    navigate('/admin')
+                }
 
             } catch (err) {
                 // alert(error.response.data.message)
@@ -136,12 +154,12 @@ export const LoginComponent = () => {
 
 
     return (
-        <div className="w-full sm:w-1/2 h-[70vh] bg-white my-3 mx-auto grid grid-cols-3 shadow-md">
+        <div className="w-full sm:w-1/2 bg-white my-3 mx-auto grid grid-cols-3 shadow-md">
 
-            <div className="relative bg-[#2874F0] overflow-hidden">
+            <div className="relative bg-[#2874F0] overflow-hidden flex flex-col justify-between h-full">
                 <div className="p-2 sm:p-8">
                     <h1 className="text-3xl text-white font-semibold">Login</h1>
-                    <p className="text-[14px] font-sans text-gray-300 mt-3">Get access Your Orders Wishlist and Recommendations</p>
+                    <p className="text-[14px] font-sans text-gray-300 mt-3 break-all">Get access Your Orders Wishlist and Recommendations</p>
                 </div>
                 <div className="w-full absolute bottom-10 left-0 flex justify-center">
                     <img className="object-cover" src="https://static-assets-web.flixcart.com/fk-p-linchpin-web/fk-cp-zion/img/login_img_c4a81e.png" alt="" />
@@ -149,7 +167,8 @@ export const LoginComponent = () => {
             </div>
 
             <div className="col-span-2 flex justify-center items-center">
-                <form action="#" className="flex flex-col gap-10 w-full px-10">
+                <form action="#" className="flex flex-col gap-8 w-full px-10 py-3 my-3">
+                    <label className="text-blue-800 font-bold uppercase text-center underline" htmlFor="">{isUser ? 'User' : 'Admin'} Login</label>
                     <input
                         ref={emailRef}
                         onChange={emailChangeHandler}
@@ -165,14 +184,34 @@ export const LoginComponent = () => {
                     <button
                         onClick={(event) => loginHandler(event)}
                         className="flex bg-[#fb641b] justify-center py-3 rounded-sm shadow-md text-white font-bold active:scale-95 outline-none">Login</button>
-                    <button
+                    {isUser && <button
                         onClick={(event) => {
                             event.preventDefault()
                             navigate('/signup')
                         }}
-                        className="flex justify-center py-3 rounded-sm shadow-lg text-blue-500 font-semibold active:scale-95 outline-none">
-                        Don't have an account? Create an account
-                    </button>
+                        className="flex text-xs justify-center py-3 mb-2 rounded-sm shadow-lg text-blue-500 font-semibold active:scale-95 outline-none">
+                        Don't have an account? Create an User account
+                    </button>}
+
+
+                    {!isUser &&
+                        <button
+                            onClick={(event) => {
+                                event.preventDefault()
+                                navigate('/admin/signup')
+                            }}
+                            className="flex text-xs justify-center py-3 mb-2 rounded-sm shadow-lg text-blue-500 font-semibold active:scale-95 outline-none">
+                            Admin Signup
+                        </button>}
+
+
+                    {isUser === true ?
+                        <Link className="text-right text-sm mb-2 cursor-pointer text-blue-600 underline" to={'/admin/signup'}>Create an Admin account</Link>
+                        :
+                        <Link className="text-right text-sm mb-2 cursor-pointer text-blue-600 underline" to={'/signup'}>Create an User account</Link>
+                    }
+
+
                 </form>
             </div>
 

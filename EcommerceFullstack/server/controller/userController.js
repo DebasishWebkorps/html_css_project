@@ -12,18 +12,26 @@ exports.postLogin = async (req, res) => {
             return res.status(404).json({ message: 'User doesn"t exist' })
         }
 
+
         const isAuthenticated = await bcrypt.compare(password, existingUser.password)
 
 
-        if (!isAuthenticated || existingUser.role !== role) {
+        if (!isAuthenticated) {
 
             return res.status(400).json({ message: 'Incorrect Credentials' })
         }
 
+        if (existingUser.role !== role) {
+
+            return res.status(400).json({ message: 'You are Not Authorised' })
+        }
+
+        const userWithoutPassword = existingUser.toObject()
+        delete userWithoutPassword.password
 
         const token = await jwt.sign({ id: existingUser._id }, process.env.secret_password)
 
-        return res.status(200).json({ message: 'Login Successfully', token, user: existingUser })
+        return res.status(200).json({ message: 'Login Successfully', token, user: userWithoutPassword })
 
     } catch (error) {
         console.log(error.message)
@@ -34,7 +42,8 @@ exports.postLogin = async (req, res) => {
 
 exports.postSignup = async (req, res) => {
     try {
-        const { email, password } = req.body
+        const { email, password, role } = req.body
+
 
         const existingUser = await User.findOne({ email })
 
@@ -47,6 +56,7 @@ exports.postSignup = async (req, res) => {
         const user = new User({
             email,
             password: hashedPassword,
+            role
         })
 
         await user.save()
@@ -63,7 +73,8 @@ exports.postSignup = async (req, res) => {
 exports.postVerifyToken = async (req, res) => {
     try {
         if (req.user) {
-            return res.status(200).json({ message: 'Valid Token ', email: req.user.email, cart: req.user.cart })
+            return res.status(200).json({ message: 'Valid Token ', email: req.user.email, cart: req.user.cart, role: req.user.role })
+            // return res.status(200).json({ message: 'Valid Token ', email: req.user.email, cart: req.user.cart, role: req.user.role })
         } else {
             throw new Error
         }

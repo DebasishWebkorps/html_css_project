@@ -8,17 +8,18 @@ import { SignupComponent } from './components/SignupComponent'
 import { Footer } from './components/Footer'
 import { CartComponent } from './components/CartComponent'
 import { OrderComponent } from './components/OrderComponent'
-import { toast, ToastContainer } from 'react-toastify'
+import { ToastContainer } from 'react-toastify'
 import { ProductComponent } from './components/ProductComponent'
 import { SingleProductComponent } from './components/SingleProductComponent'
 import 'react-toastify/dist/ReactToastify.css';
 import { HomeProduct } from './components/HomeProduct'
 import { useEffect } from 'react'
 import axios from 'axios'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './store/userSlice'
 import { ProtectComponent } from './components/ProtectComponent'
 import { SearchComponent } from './components/searchComponent'
+import { Adminpage } from './components/adminPage/AdminPage'
 
 
 function App() {
@@ -26,6 +27,10 @@ function App() {
   const location = useLocation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+
+  const user = useSelector(state=>state.user)
+  
 
 
   const verifyToken = async () => {
@@ -59,16 +64,35 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      {location.pathname !== '/admin' && <Navbar />}
 
 
       {
         (location.pathname !== '/login' &&
+          location.pathname !== '/admin' &&
+          location.pathname !== '/admin/login' &&
+          location.pathname !== '/admin/signup' &&
           // location.pathname.startsWith !== '/search' &&
           location.pathname !== '/signup') && <MenuBar />
       }
 
       <Routes>
+
+        <Route path='/admin/login' element={
+          <LoginComponent />
+        } />
+
+        <Route path='/admin/signup' element={
+          <SignupComponent />
+        } />
+
+        <Route path='/admin' element={
+          <ProtectComponent>
+            <Adminpage />
+          </ProtectComponent>
+        } />
+
+
         <Route path='/login' element={<LoginComponent />} />
         <Route path='/signup' element={<SignupComponent />} />
 
@@ -97,7 +121,7 @@ function App() {
         position='bottom-right'
         autoClose='2000'
       />
-      <Footer />
+      {location.pathname !== '/admin' && <Footer />}
 
     </>
   )

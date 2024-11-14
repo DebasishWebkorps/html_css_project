@@ -12,9 +12,9 @@ export const CartComponent = () => {
 
     const cart = useSelector(state => state.user.cart)
 
-    const totalPrice = cart?.reduce((acc, product) => acc += (+product.productPrice * +product.quantity), 0)
+    const totalPrice = cart?.reduce((acc, product) => acc += (+product?.product?.price * +product?.quantity), 0)
 
-    const totalItem = cart?.reduce((acc, product) => acc += product.quantity, 0)
+    const totalItem = cart?.reduce((acc, product) => acc += product?.quantity, 0)
 
     const getCart = async () => {
 
@@ -28,7 +28,7 @@ export const CartComponent = () => {
                     userToken: userToken
                 },
             })
-            dispatch(setCart(response.data.cart))
+            dispatch(setCart(response.data))
         } catch (error) {
             toast.error(error.message)
         }
@@ -123,35 +123,35 @@ export const CartComponent = () => {
 
 
     return (
-        <div className="w-full sm:w-4/5 mx-auto flex my-4 gap-4 flex-col lg:flex-row">
+        <div className="w-full sm:w-4/5 mx-auto flex my-4 gap-4 flex-col md:flex-row">
 
-            {cart.length > 0 ?
+            {cart?.length > 0 ?
 
                 <div className="flex-1 bg-white p-1 sm:p-4">
                     <h3 className="capitalize border-b border-b-gray-400 px-3 text-sm sm:text-lg">My Cart <span>({cart.length})</span></h3>
                     {
-                        cart.map(item => {
+                        cart?.map(item => {
                             return (
 
-                                <div key={item._id} className="flex gap-3 p-1 sm:p-3 border-b items-center" >
+                                <div key={item.product?._id} className="flex gap-3 p-1 sm:p-3 border-b items-center" >
                                     <div className="p-1 overflow-hidden w-6 sm:w-8 lg:w-10">
-                                        <img className="object-contain" src={`${item.productImage}`} alt="" />
+                                        <img className="object-contain" src={`${item.product?.images[0]}`} alt="" />
                                     </div>
                                     <div className="grid grid-cols-[2fr,1fr,1fr,1fr] gap-0 sm:gap-2 justify-center flex-1 font-robotothin text-sm">
-                                        <h2 className="text-ellipsis whitespace-nowrap overflow-hidden">{item.productName}</h2>
-                                        <p className="text-xs sm:text-sm whitespace-nowrap">Rs. {item.productPrice} /-</p>
+                                        <h2 className="text-ellipsis whitespace-nowrap overflow-hidden">{item.product?.name}</h2>
+                                        <p className="text-xs sm:text-sm whitespace-nowrap">Rs. {item.product?.price} /-</p>
                                         <p className="text-xs sm:text-sm whitespace-nowrap">qty - {item.quantity}</p>
                                         <div className="flex gap-1 justify-evenly flex-nowrap">
                                             <button onClick={() => {
-                                                increaseCart(item.productId)
+                                                increaseCart(item.product._id)
                                             }} className="text-green-400 shadow-md px-1 sm:px-2 w-max h-max font-bold active:scale-95">+</button>
                                             <button
                                                 onClick={() => {
-                                                    decreaseCart(item.productId)
+                                                    decreaseCart(item.product._id)
                                                 }} className="px-1 sm:px-2 shadow-md w-max text-yellow-500 font-extrabold h-max active:scale-95">-</button>
                                             <button
                                                 onClick={() => {
-                                                    removeFromCart(item.productId)
+                                                    removeFromCart(item.product._id)
                                                 }}
                                                 className="shadow-md text-red-500 px-1 sm:px-2 w-max h-max active:scale-95 font-bold" >x</button>
                                         </div>
@@ -175,7 +175,7 @@ export const CartComponent = () => {
                     <h2 className="flex justify-between gap-4 text-xs">Total Item : <span>{totalItem}</span></h2>
                     <h2 className="flex justify-between gap-4 text-xs">Total Amount : <span>Rs.{totalPrice.toFixed(2)}/-</span></h2>
 
-                    <button onClick={placeOrderHandler} className="bg-[#fb641b] text-white py-2 rounded-sm">Place Order</button>
+                    <button onClick={placeOrderHandler} className="bg-[#fb641b] text-white py-2 rounded-sm active:scale-90">Place Order</button>
                 </div>
             }
 

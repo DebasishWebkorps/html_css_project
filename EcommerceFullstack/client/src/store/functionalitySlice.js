@@ -2,31 +2,29 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     isReload: false,
-    isNotification: {
-        type: 'notification',
-        message: 'Notification'
-    },
-    isMobileMenu: false
+    isMobileMenu: false,
+    adminPage: 'dashboard',
+    editProductId: ''
 }
 
 const functionalitySlice = createSlice({
     name: 'functionality',
     initialState,
     reducers: {
-        setNotification: (state, payload) => {
-            state.isNotification = {
-                type: payload.data.type,
-                message: payload.data.message
-            }
-        },
         showMobileMenu: (state) => {
             state.isMobileMenu = true
         },
         hideMobileMenu: (state) => {
             state.isMobileMenu = false
+        },
+        setAdminPage: (state, action) => {
+            state.adminPage = action.payload
+        },
+        setEditProductId: (state, action) => {
+            state.editProductId = action.payload
         }
     }
 })
 
-export const { setNotification, showMobileMenu, hideMobileMenu } = functionalitySlice.actions;
+export const { showMobileMenu, hideMobileMenu, setAdminPage, setEditProductId } = functionalitySlice.actions;
 export default functionalitySlice.reducer;

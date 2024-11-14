@@ -12,6 +12,9 @@ export const Navbar = () => {
     const searchRef = useRef()
 
     const email = useSelector(state => state.user.email)
+    const role = useSelector(state => state.user.role)
+    const cart = useSelector(state => state.user.cart)
+
     const isMobileOpen = useSelector(state => state.functionality.isMobileMenu)
 
     const navigateTo = (path) => {
@@ -95,13 +98,12 @@ export const Navbar = () => {
             }
 
 
-
             <div className="w-1/3 hidden sm:flex rounded-[3px] overflow-hidden">
                 <input ref={searchRef} type="text" className="flex-1 pl-4 placeholder:text-[#757575] font-sans text-sm outline-none" placeholder="Search for products brand and more" />
                 <button onClick={searchHandler} className="bg-[#FFFFFF] p-2 active:scale-90">
                     {/* <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M7.5922 12.6122C4.90331 12.6122 2.72442 10.4389 2.72442 7.75889C2.72442 5.07778 4.90331 2.90444 7.5922 2.90444C10.2811 2.90444 12.46 5.07778 12.46 7.75889C12.46 10.44 10.2811 12.6122 7.5922 12.6122ZM7.5922 0.573334C3.6122 0.573334 0.385529 3.79 0.385529 7.75889C0.385529 11.7278 3.6122 14.9444 7.5922 14.9444C11.5722 14.9444 14.7989 11.7278 14.7989 7.75889C14.7989 3.79 11.5722 0.573334 7.5922 0.573334Z" fill="#2874F0" />
-                    </svg> */}
+                        </svg> */}
 
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                         <path d="M10.5 3C6.357 3 3 6.357 3 10.5S6.357 18 10.5 18c1.859 0 3.536-.742 4.786-1.962l6.792 6.792 1.5-1.5-6.792-6.792C17.758 14.536 18 12.859 18 10.5 18 6.357 14.643 3 10.5 3zM10.5 5C13.537 5 16 7.463 16 10.5S13.537 16 10.5 16 5 13.537 5 10.5 7.463 5 10.5 5z" fill="#2874F0" />
@@ -113,10 +115,10 @@ export const Navbar = () => {
 
 
 
-            {email ?
+            {(email && role === 'user') &&
                 <div
                     onClick={() => navigate('/cart')}
-                    className="hidden sm:flex justify-center items-center gap-2 text-[#FFFFFF] cursor-pointer active:scale-95">
+                    className="hidden sm:flex relative justify-center mr-2 items-center gap-2 text-[#FFFFFF] cursor-pointer active:scale-95">
                     <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <g clipPath="url(#clip0_1_1045)">
                             <path d="M16.0901 2.405H5.65713C3.77013 2.405 3.23013 0.805 3.23013 0.805L3.02713 0.21C2.97813 0.085 2.85313 0 2.71613 0H1.10613C0.870128 0 0.706128 0.24 0.794128 0.46L1.43813 2.405L3.88013 9.767C3.92713 9.904 4.05513 9.997 4.20013 9.997H12.6181L12.1251 11.955H4.53813L4.54013 11.958C4.52313 11.958 4.50713 11.955 4.49013 11.955C3.43013 11.955 2.57013 12.815 2.57013 13.875C2.57013 14.935 3.43013 15.795 4.49013 15.795C5.48013 15.795 6.29513 15.045 6.40013 14.083L11.9501 14.159C12.0701 15.081 12.8601 15.795 13.8171 15.795C14.8571 15.795 15.7021 14.951 15.7021 13.91C15.7021 13.044 15.1181 12.317 14.3221 12.096L16.7451 3.264C16.8651 2.831 16.5391 2.405 16.0901 2.405Z" fill="white" />
@@ -128,12 +130,12 @@ export const Navbar = () => {
                         </defs>
                     </svg>
 
-                    Cart
+                    Cart <span className="absolute top-0 right-0 translate-x-full font-bold translate-y-1/2 text-xs">{cart.length === 0 ? '' : cart.length}</span>
                 </div>
-                : ''
+                // : ''
             }
 
-            {email ?
+            {(email && role === 'user') &&
                 <div
                     onClick={() => navigate('/orders')}
                     className="hidden sm:flex justify-center items-center gap-2 text-[#FFFFFF] cursor-pointer active:scale-95">
@@ -145,13 +147,21 @@ export const Navbar = () => {
 
                     Orders
                 </div>
-                : ''
+                // : ''
             }
 
 
 
-            {email && <p className="hidden sm:flex text-white rounded-md capitalize justify-center items-center px-4">Hi, {email.split('@')[0]}</p>}
+            {email && <p className="hidden sm:flex text-white rounded-md capitalize justify-center items-center px-4 whitespace-nowrap">Hi, {email.split('@')[0]}</p>}
 
+
+            {(email && role === 'admin' &&
+                <div
+                    onClick={() => navigateTo('/admin')}
+                    className="cursor-pointer hidden text-[#FFFFFF] sm:flex items-center justify-center rounded-[3px] active:scale-95 px-4">
+                    <p>Dashboard</p>
+                </div>
+            )}
 
             <div
                 onClick={logoutHandler}
@@ -193,7 +203,7 @@ export const Navbar = () => {
 
 
 
-                        {email ?
+                        {(email && role === 'user') &&
                             <div
                                 onClick={() => navigateTo('/cart')}
                                 className="flex justify-center py-3 items-center gap-2 text-[#FFFFFF] cursor-pointer active:scale-95 hover:bg-blue-600">
@@ -208,12 +218,13 @@ export const Navbar = () => {
                                     </defs>
                                 </svg>
 
-                                Cart
+                    Cart <span className="absolute top-0 right-0 translate-x-full font-bold translate-y-1/2 text-xs">{cart.length === 0 ? '' : cart.length}</span>
+                    
                             </div>
-                            : ''
+                            // : ''
                         }
 
-                        {email ?
+                        {(email && role === 'user') &&
                             <div
                                 onClick={() => navigateTo('/orders')}
                                 className="flex justify-center items-center gap-2 text-[#FFFFFF] cursor-pointer active:scale-95 hover:bg-blue-600 py-3">
@@ -226,7 +237,7 @@ export const Navbar = () => {
 
                                 Orders
                             </div>
-                            : ''
+                            // : ''
                         }
 
 
@@ -235,6 +246,14 @@ export const Navbar = () => {
                             className="flex text-white rounded-md capitalize justify-center items-center px-4  hover:bg-blue-600 py-3">
                             Hi, {email.split('@')[0]}
                         </p>}
+
+                        {(email && role === 'admin') &&
+                            <div
+                                onClick={() => navigateTo('/admin')}
+                                className="cursor-pointer text-[#FFFFFF] py-3 flex items-center justify-center rounded-[3px] active:scale-95 px-4">
+                                <p>Dashboard</p>
+                            </div>
+                        }
 
 
                         <div

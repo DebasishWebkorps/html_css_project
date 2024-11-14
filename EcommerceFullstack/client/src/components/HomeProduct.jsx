@@ -7,12 +7,16 @@ export const HomeProduct = () => {
     const [jewellery, setJewellery] = useState([])
     const [electronics, setElectronics] = useState([])
 
+
+
     const navigate = useNavigate()
 
     const getProds = async () => {
         try {
-            const jewellery = await axios.get('https://fakestoreapi.com/products/category/jewelery?limit=4')
-            const electronics = await axios.get('https://fakestoreapi.com/products/category/electronics?limit=4')
+            const jewellery = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/category/jewellery`)
+            const electronics = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/category/electronics`)
+            // const jewellery = await axios.get('https://fakestoreapi.com/products/category/jewelery?limit=4')
+            // const electronics = await axios.get('https://fakestoreapi.com/products/category/electronics?limit=4')
             setJewellery(jewellery.data)
             setElectronics(electronics.data)
         } catch (error) {
@@ -41,12 +45,12 @@ export const HomeProduct = () => {
                         {
                             jewellery?.map(prod => {
                                 return (
-                                    <div key={prod.id} className=" w-4/5 mx-auto h-60 overflow-hidden shadow-md p-3 rounded-sm">
+                                    <div key={prod._id} className=" w-4/5 mx-auto h-60 overflow-hidden shadow-md p-2 rounded-sm">
                                         <img
                                             onClick={() => {
-                                                navigate(`/products/${prod.id}`)
+                                                navigate(`/products/${prod._id}`)
                                             }}
-                                            className="object-contain h-full w-full cursor-pointer" src={prod.image} alt="" />
+                                            className="object-cover h-full w-full cursor-pointer" src={prod.images[0]} alt="" />
                                     </div>
                                 )
                             })
@@ -68,12 +72,12 @@ export const HomeProduct = () => {
                         {
                             electronics?.map(prod => {
                                 return (
-                                    <div key={prod.id} className=" w-4/5 mx-auto h-60 overflow-hidden shadow-md p-3 rounded-sm">
+                                    <div key={prod._id} className=" w-4/5 mx-auto h-60 overflow-hidden shadow-md p-2 rounded-sm">
                                         <img
                                             onClick={() => {
-                                                navigate(`/products/${prod.id}`)
+                                                navigate(`/products/${prod._id}`)
                                             }}
-                                            className="object-contain h-full w-full cursor-pointer" src={prod.image} alt="" />
+                                            className="object-cover h-full w-full cursor-pointer" src={prod.images[0]} alt="" />
                                     </div>
                                 )
                             })

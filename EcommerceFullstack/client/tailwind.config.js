@@ -7,6 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        interonly: ["Inter"],
         inter: ["Inter", "sans-serif"],
         robotothin: ["Roboto", "sans-serif"]
       }

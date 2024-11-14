@@ -3,23 +3,31 @@ const mongoose = require('mongoose')
 const userSchema = mongoose.Schema({
     email: {
         type: String,
-        allowNull: false,
+        required: true,
         unique: true
     },
     password: {
         type: String,
-        allowNull: false
+        required: true
+    },
+    role: {
+        type: String,
+        default: 'user'
     },
     cart: [{
-        productName: String,
-        productId: Number,
-        productPrice: Number,
-        productImage: String,
+        // productName: String,
+        productId: mongoose.Types.ObjectId,
+        // productMrp: Number,
+        // productPrice: Number,
+        // productImage: String,
         quantity: {
             type: Number,
-            allowNull: false,
+            required: true,
             default: 1
         }
+    }],
+    Orders:[{
+        type: mongoose.Types.ObjectId,
     }]
 })
 

@@ -11,18 +11,31 @@ export const ProductComponent = () => {
     const navigate = useNavigate()
 
     const getProducts = async () => {
+        const userToken = localStorage.getItem('userToken')
+
         try {
             let response;
             if (params?.category === 'electronics') {
-                response = await axios.get('https://fakestoreapi.com/products/category/electronics')
             } else if (params?.category === 'jewelery') {
-                response = await axios.get('https://fakestoreapi.com/products/category/jewelery')
-            } else if(params?.category === 'women"s clothing'){
-                response = await axios.get(`https://fakestoreapi.com/products/category/women's%20clothing`)
-            }else if (params?.category === 'men"s clothing'){
-                response = await axios.get(`https://fakestoreapi.com/products/category/men's%20clothing`)
-            }else{
-                response = await axios.get(`https://fakestoreapi.com/products/`)
+            } else if (params?.category === 'womensfashion') {
+                response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/category/womenfashion`, {
+                    headers: {
+                        userToken: userToken
+                    }
+                })
+            } else if (params?.category === 'mensfashion') {
+                response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/category/mensfashion`, {
+                    headers: {
+                        userToken: userToken
+                    }
+                })
+            } else {
+                response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/`, {
+                    headers: {
+                        userToken: userToken
+                    }
+                })
+
             }
             setProducts(response.data)
 
@@ -39,19 +52,20 @@ export const ProductComponent = () => {
             {products?.map(product => {
                 return (
 
-                    <div key={product.id}
+                    <div key={product._id}
                         onClick={() => {
-                            navigate(`/products/${product.id}`)
+                            navigate(`/products/${product._id}`)
                         }}
                         className="shadow-md overflow-hidden bg-white rounded-md relative border flex flex-col justify-between">
                         {/* <p className="absolute top-0 right-0 bg-blue-600 text-white p-1 rounded-full z-10">{product.rating.rate}</p> */}
                         <div className="w-full h-3/4 overflow-hidden p-2">
-                            <img className="object-contain w-full h-full hover:scale-110 cursor-pointer" src={product.image} alt="" />
+                            <img className="object-contain w-full h-full hover:scale-110 cursor-pointer" src={product.images[0]} alt="" />
+                            {/* <img className="object-contain w-full h-full hover:scale-110 cursor-pointer" src={product.image} alt="" /> */}
                         </div>
 
                         <div>
-                            <p className="px-2 font-mono whitespace-nowrap">{product.title.split(' ').slice(0, 3).join(' ')}</p>
-                            {/* <p className="px-2 font-mono whitespace-nowrap">{product.title}</p> */}
+                            <p className="px-2 font-mono whitespace-nowrap">{product.name.split(' ').slice(0, 3).join(' ')}</p>
+                            {/* <p className="px-2 font-mono whitespace-nowrap">{product.title.split(' ').slice(0, 3).join(' ')}</p> */}
                             <p className="text-right px-2 pb-2 text-yellow-600">Rs.{product.price}/-</p>
                         </div>
                     </div>

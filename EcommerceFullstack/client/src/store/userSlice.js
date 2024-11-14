@@ -2,7 +2,9 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     email: '',
-    cart: []
+    role: '',
+    cart: [],
+    cartItem: 0
 }
 
 const userSlice = createSlice({
@@ -11,17 +13,22 @@ const userSlice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.email = action.payload.email
+            state.role = action.payload.role
             state.cart = [...action.payload.cart]
+            state.cartItem = action.payload.cart.length
         },
         resetUser: (state) => {
             return {
-                email: ''
+                email: '',
+                role: '',
+                cart: [],
+                cartItem: 0
             }
         },
         updateCart: (state, action) => {
             const { productId } = action.payload
 
-            const existIndex = state.cart.findIndex(item => item.productId === +productId)
+            const existIndex = state.cart.findIndex(item => item.product._id === productId)
 
             if (existIndex >= 0) {
 
@@ -42,7 +49,7 @@ const userSlice = createSlice({
                     state.cart.splice(existIndex, 1)
                 }
 
-            }
+            } 
 
         },
         resetCart: (state) => {
