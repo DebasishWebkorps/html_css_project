@@ -1,12 +1,16 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
+import { hideLoading, showLoading } from "../../store/functionalitySlice"
 
 export const AdminDashboardComponent = () => {
 
     const [dashboard, setDashboard] = useState(null)
+    const dispatch = useDispatch()
 
     const getDashboard = async () => {
         try {
+            dispatch(showLoading())
             const userToken = localStorage.getItem('userToken')
             const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}admin/dashboard`, {
                 headers: {
@@ -17,6 +21,8 @@ export const AdminDashboardComponent = () => {
             setDashboard(response.data)
         } catch (error) {
             console.log('some error occured')
+        }finally{
+            dispatch(hideLoading())
         }
 
     }

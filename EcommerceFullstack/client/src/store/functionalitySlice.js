@@ -22,9 +22,15 @@ const functionalitySlice = createSlice({
         },
         setEditProductId: (state, action) => {
             state.editProductId = action.payload
+        },
+        showLoading: (state) => {
+            state.isReload = true
+        },
+        hideLoading: (state) => {
+            state.isReload = false
         }
     }
 })
 
-export const { showMobileMenu, hideMobileMenu, setAdminPage, setEditProductId } = functionalitySlice.actions;
+export const { showMobileMenu, hideMobileMenu, setAdminPage, setEditProductId, showLoading, hideLoading } = functionalitySlice.actions;
 export default functionalitySlice.reducer;

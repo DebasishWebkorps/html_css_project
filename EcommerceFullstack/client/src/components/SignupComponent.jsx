@@ -1,12 +1,14 @@
 import axios from "axios"
 import { useEffect, useRef, useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
+import { hideLoading, showLoading } from "../store/functionalitySlice"
 
 export const SignupComponent = () => {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const emailRef = useRef('')
     const passwordRef = useRef('')
 
@@ -127,6 +129,7 @@ export const SignupComponent = () => {
         if (error.emailError === '' && error.passwordError === '') {
 
             try {
+                dispatch(showLoading())
                 const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}auth/signup`, user)
                 toast.success(response.data.message)
                 if (isUser) {
@@ -144,6 +147,8 @@ export const SignupComponent = () => {
                         navigate('/admin/login')
                     }
                 }
+            } finally {
+                dispatch(hideLoading())
             }
 
 

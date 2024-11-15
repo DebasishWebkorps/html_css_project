@@ -1,7 +1,8 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
-import { setAdminPage, setEditProductId } from "../../store/functionalitySlice"
+import { hideLoading, setAdminPage, setEditProductId, showLoading } from "../../store/functionalitySlice"
+import { toast } from "react-toastify"
 
 export const AdminProductComponent = () => {
 
@@ -11,13 +12,22 @@ export const AdminProductComponent = () => {
 
     const getProducts = async () => {
 
-        const userToken = localStorage.getItem('userToken')
-        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}admin/products`, {
-            headers: {
-                userToken: userToken
-            }
-        })
-        setProducts(response.data)
+        try {
+            dispatch(showLoading())
+            const userToken = localStorage.getItem('userToken')
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}admin/products`, {
+                headers: {
+                    userToken: userToken
+                }
+            })
+            setProducts(response.data)
+
+        } catch (error) {
+            toast.error(error.message)
+        } finally {
+            dispatch(hideLoading())
+        }
+
     }
 
     useEffect(() => {

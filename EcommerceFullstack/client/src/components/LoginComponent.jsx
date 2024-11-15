@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
 import { setUser } from "../store/userSlice"
+import { hideLoading, showLoading } from "../store/functionalitySlice"
 
 export const LoginComponent = () => {
 
@@ -132,6 +133,7 @@ export const LoginComponent = () => {
         if (error.emailError === '' && error.passwordError === '') {
 
             try {
+                dispatch(showLoading())
                 const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}auth/login`, user)
                 localStorage.setItem('userToken', response.data.token)
                 toast.success(response.data?.message)
@@ -145,6 +147,8 @@ export const LoginComponent = () => {
             } catch (err) {
                 // alert(error.response.data.message)
                 toast.error(err.response?.data?.message)
+            }finally{
+                dispatch(hideLoading())
             }
         }
 

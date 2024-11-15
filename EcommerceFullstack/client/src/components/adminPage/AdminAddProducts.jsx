@@ -1,11 +1,13 @@
 import axios from "axios"
 import { useRef, useState } from "react"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { toast } from "react-toastify"
+import { hideLoading, showLoading } from "../../store/functionalitySlice"
 
 export const AdminAddProducts = () => {
 
     const [imagesUrl, setImagesUrl] = useState([])
+    const dispatch = useDispatch()
 
     const [error, setError] = useState({
         nameError: '',
@@ -241,6 +243,7 @@ export const AdminAddProducts = () => {
 
 
         try {
+            dispatch(showLoading())
             const userToken = localStorage.getItem('userToken')
 
             const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}admin/addproduct`, formData, {
@@ -253,13 +256,15 @@ export const AdminAddProducts = () => {
 
         } catch (err) {
             toast.error(err.response.data.message)
+        } finally {
+            dispatch(hideLoading())
         }
 
     }
 
     return (
         <div className="w-full mx-auto p-1 sm:p-6 bg-white shadow-md rounded-md font-interonly">
-            <h2 className="text-lg sm:text-2xl font-bold mb-4 text-center">Add Product'</h2>
+            <h2 className="text-lg sm:text-2xl font-bold mb-4 text-center">Add Product</h2>
             <form encType="multipart/form-data" onSubmit={(event) => addProductHandler(event)}>
                 <div className="mb-4">
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700">Product Name</label>
@@ -308,6 +313,7 @@ export const AdminAddProducts = () => {
                         <option value="mensfashion">Men's Fashion</option>
                         <option value="womenfashion">Women's Fashion</option>
                         <option value="home">Home</option>
+                        <option value="jewellery">Jewellery</option>
                     </select>
                     {error.categoryError !== '' && <p className="text-red-400">{error.categoryError}</p>}
                 </div>

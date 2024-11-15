@@ -1,6 +1,9 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { hideLoading, showLoading } from "../store/functionalitySlice"
+import { toast } from "react-toastify"
 
 export const HomeProduct = () => {
 
@@ -8,19 +11,20 @@ export const HomeProduct = () => {
     const [electronics, setElectronics] = useState([])
 
 
-
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const getProds = async () => {
         try {
+            dispatch(showLoading())
             const jewellery = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/category/jewellery`)
             const electronics = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/category/electronics`)
-            // const jewellery = await axios.get('https://fakestoreapi.com/products/category/jewelery?limit=4')
-            // const electronics = await axios.get('https://fakestoreapi.com/products/category/electronics?limit=4')
             setJewellery(jewellery.data)
             setElectronics(electronics.data)
         } catch (error) {
-
+            toast.error('some error occured')
+        } finally {
+            dispatch(hideLoading())
         }
     }
 

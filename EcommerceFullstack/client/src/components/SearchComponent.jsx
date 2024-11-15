@@ -1,17 +1,28 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
+import { hideLoading, showLoading } from "../store/functionalitySlice"
+import { toast } from "react-toastify"
 
 export const SearchComponent = () => {
 
     const params = useParams()
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [filteredData, setFilteredData] = useState([])
 
     const getProducts = async () => {
-        const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/search/${params.query}`)
-        setFilteredData(response.data)
+        try {
+            dispatch(showLoading())
+            const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/search/${params.query}`)
+            setFilteredData(response.data)
+        } catch (error) {
+            toast.error('some error occured')
+        } finally {
+            dispatch(hideLoading())
+        }
     }
 
     useEffect(() => {

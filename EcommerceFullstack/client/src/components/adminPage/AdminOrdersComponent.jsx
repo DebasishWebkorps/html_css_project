@@ -1,13 +1,17 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import { toast } from "react-toastify"
+import { hideLoading, showLoading } from "../../store/functionalitySlice"
 
 export const AdminOrdersComponent = () => {
 
     const [orders, setOrders] = useState([])
+    const dispatch = useDispatch()
 
     const getOrders = async () => {
         try {
+            dispatch(showLoading())
             const userToken = localStorage.getItem('userToken')
             const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}admin/orders`, {
                 headers: {
@@ -18,12 +22,15 @@ export const AdminOrdersComponent = () => {
             setOrders(response.data)
         } catch (error) {
             console.log('some error occured')
+        }finally{
+            dispatch(hideLoading())
         }
 
     }
 
     const statusChangeHandler = async (event, orderId) => {
         try {
+            dispatch(showLoading())
             const status = event.target.value
             console.log(status, orderId)
             const userToken = localStorage.getItem('userToken')
@@ -38,6 +45,8 @@ export const AdminOrdersComponent = () => {
             getOrders()
         } catch (error) {
             toast.error('some error occured', error.message)
+        }finally{
+            dispatch(hideLoading())
         }
     }
 

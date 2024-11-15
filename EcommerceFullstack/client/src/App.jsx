@@ -20,6 +20,7 @@ import { setUser } from './store/userSlice'
 import { ProtectComponent } from './components/ProtectComponent'
 import { SearchComponent } from './components/searchComponent'
 import { Adminpage } from './components/adminPage/AdminPage'
+import { Loader } from './components/Loader'
 
 
 function App() {
@@ -29,8 +30,8 @@ function App() {
   const navigate = useNavigate()
 
 
-  const user = useSelector(state=>state.user)
-  
+  const isLoading = useSelector(state => state.functionality.isReload)
+
 
 
   const verifyToken = async () => {
@@ -122,7 +123,7 @@ function App() {
         autoClose='2000'
       />
       {location.pathname !== '/admin' && <Footer />}
-
+      {isLoading && <Loader />}
     </>
   )
 }

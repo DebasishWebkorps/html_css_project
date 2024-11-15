@@ -1,7 +1,9 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
+import { useDispatch } from "react-redux"
 import { useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
+import { hideLoading, showLoading } from "../store/functionalitySlice"
 
 export const ProductComponent = () => {
     const [products, setProducts] = useState(null)
@@ -9,14 +11,32 @@ export const ProductComponent = () => {
     const params = useParams()
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const getProducts = async () => {
         const userToken = localStorage.getItem('userToken')
 
         try {
+            dispatch(showLoading())
             let response;
-            if (params?.category === 'electronics') {
-            } else if (params?.category === 'jewelery') {
+            if (params?.category === 'home') {
+                response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/category/home`, {
+                    headers: {
+                        userToken: userToken
+                    }
+                })
+            } else if (params?.category === 'electronics') {
+                response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/category/electronics`, {
+                    headers: {
+                        userToken: userToken
+                    }
+                })
+            } else if (params?.category === 'jewellery') {
+                response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/category/jewellery`, {
+                    headers: {
+                        userToken: userToken
+                    }
+                })
             } else if (params?.category === 'womensfashion') {
                 response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/category/womenfashion`, {
                     headers: {
@@ -30,7 +50,7 @@ export const ProductComponent = () => {
                     }
                 })
             } else {
-                response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/`, {
+                response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product`, {
                     headers: {
                         userToken: userToken
                     }
@@ -41,12 +61,14 @@ export const ProductComponent = () => {
 
         } catch (error) {
             toast.error(error.message)
+        } finally {
+            dispatch(hideLoading())
         }
     }
 
     useEffect(() => {
         getProducts()
-    }, [params])
+    }, [params?.category])
     return (
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 w-full sm:w-4/5 mx-auto my-4 p-2">
             {products?.map(product => {

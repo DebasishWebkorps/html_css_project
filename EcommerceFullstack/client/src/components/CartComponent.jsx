@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"
 import { resetCart, setCart, setUser, updateCart } from "../store/userSlice"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
+import { hideLoading, showLoading } from "../store/functionalitySlice"
 
 export const CartComponent = () => {
 
@@ -19,6 +20,7 @@ export const CartComponent = () => {
     const getCart = async () => {
 
         try {
+            dispatch(showLoading())
             const userToken = localStorage.getItem('userToken')
 
             if (!userToken) throw new Error
@@ -31,6 +33,8 @@ export const CartComponent = () => {
             dispatch(setCart(response.data))
         } catch (error) {
             toast.error(error.message)
+        } finally {
+            dispatch(hideLoading())
         }
     }
 
@@ -98,6 +102,7 @@ export const CartComponent = () => {
 
     const placeOrderHandler = async () => {
         try {
+            dispatch(showLoading())
             const userToken = localStorage.getItem('userToken')
 
             if (!userToken) throw new Error
@@ -112,6 +117,8 @@ export const CartComponent = () => {
             navigate('/orders')
         } catch (error) {
             toast.error(error.message)
+        } finally {
+            dispatch(hideLoading())
         }
     }
 

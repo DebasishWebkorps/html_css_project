@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { toast } from "react-toastify"
 import { updateCart } from "../store/userSlice"
+import { hideLoading, showLoading } from "../store/functionalitySlice"
 
 export const SingleProductComponent = () => {
     const [product, setProduct] = useState(null)
@@ -16,10 +17,10 @@ export const SingleProductComponent = () => {
     const role = useSelector(state => state.user.role)
 
     const getProduct = async () => {
-        const userToken = localStorage.getItem('userToken')
 
         try {
-            // const response = await axios.get(`https://fakestoreapi.com/products/${productId}`)
+            dispatch(showLoading())
+            const userToken = localStorage.getItem('userToken')
             const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/${productId}`, {
                 headers: {
                     userToken: userToken
@@ -29,6 +30,8 @@ export const SingleProductComponent = () => {
         } catch (error) {
             toast.error(error.message)
             navigate('/')
+        } finally {
+            dispatch(hideLoading())
         }
     }
 
@@ -37,6 +40,7 @@ export const SingleProductComponent = () => {
             if (!email) {
                 return navigate('/login')
             }
+            dispatch(showLoading())
             const userToken = localStorage.getItem('userToken')
 
             if (!userToken) throw new Error
@@ -57,6 +61,8 @@ export const SingleProductComponent = () => {
 
         } catch (error) {
             toast.error(error.message)
+        } finally {
+            dispatch(hideLoading())
         }
     }
 
@@ -104,7 +110,7 @@ export const SingleProductComponent = () => {
                 {/* <h4 className="font-sans font-semibold">{product?.title}</h4> */}
                 {/* <p>Rating - <span className="font-semibold">{product?.rating.rate}</span></p> */}
                 <p className="text-sm font-semibold">Rs. <span className="line-through font-normal text-xs">{product?.mrp}</span> <span className="text-sm">{product?.price}</span>/-</p>
-                <p>Discount - <span className="text-lg font-semibold italic"> {Math.ceil(((product?.mrp - product?.price) / product?.mrp)*100)}%</span></p>
+                <p>Discount - <span className="text-lg font-semibold italic"> {Math.ceil(((product?.mrp - product?.price) / product?.mrp) * 100)}%</span></p>
                 <p className="font-mono text-sm text-justify">{product?.description}</p>
                 {/* <p>Stock - {product?.rating.count}</p> */}
             </div>

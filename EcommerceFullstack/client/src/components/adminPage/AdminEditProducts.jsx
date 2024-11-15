@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import { setAdminPage, setEditProductId } from "../../store/functionalitySlice"
+import { hideLoading, setAdminPage, setEditProductId, showLoading } from "../../store/functionalitySlice"
 
 export const AdminEditProducts = () => {
 
@@ -13,7 +13,6 @@ export const AdminEditProducts = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    let timerId
 
     const editProductId = useSelector(state => state.functionality.editProductId)
 
@@ -41,6 +40,7 @@ export const AdminEditProducts = () => {
         const userToken = localStorage.getItem('userToken')
 
         try {
+            dispatch(showLoading())
             // const response = await axios.get(`https://fakestoreapi.com/products/${productId}`)
             const response = await axios.get(`${import.meta.env.VITE_SERVER_URL}product/${editProductId}`, {
                 headers: {
@@ -53,6 +53,8 @@ export const AdminEditProducts = () => {
         } catch (error) {
             toast.error(error.message)
             // navigate('/')
+        } finally {
+            dispatch(hideLoading())
         }
     }
 

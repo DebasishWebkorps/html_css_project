@@ -1,14 +1,18 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { hideLoading, showLoading } from "../store/functionalitySlice";
 
 export const OrderComponent = () => {
 
     const [orders, setOrders] = useState([])
+    const dispatch = useDispatch()
 
 
     const getOrders = async () => {
         try {
+            dispatch(showLoading())
             const userToken = localStorage.getItem('userToken')
 
             if (!userToken) throw new Error
@@ -23,6 +27,8 @@ export const OrderComponent = () => {
 
         } catch (error) {
             toast.error(error.message)
+        } finally{
+            dispatch(hideLoading())
         }
     }
 
